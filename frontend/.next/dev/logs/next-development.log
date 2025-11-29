@@ -1,0 +1,26 @@
+[00:00:01.220] Server  LOG      ✓ Ready in 914ms
+[00:00:04.819] Server  LOG      ○ Compiling / ...
+[00:00:10.105] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:24.539] Server  LOG      ✓ Compiled in 153ms
+[00:03:28.566] Server  LOG      ✓ Compiled in 165ms
+[00:05:04.165] Server  LOG      ✓ Compiled in 844ms
+[00:05:55.072] Server  LOG      ✓ Compiled in 422ms
+[00:05:58.380] Server  LOG      ✓ Compiled in 164ms
+[00:06:01.055] Server  LOG      ✓ Compiled in 349ms
+[00:06:01.828] Browser ERROR   uncaughtError: ReferenceError: Malang is not defined
+[00:06:02.877] Server  LOG      ✓ Compiled in 228ms
+[00:06:02.987] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:06:04.719] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:08:47.950] Server  LOG      ✓ Compiled in 167ms
+[00:45:45.281] Server  LOG      ✓ Compiled in 172ms
+[00:50:14.739] Server  LOG      ✓ Compiled in 196ms
+[01:10:15.343] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:18:42.143] Server  LOG      ✓ Compiled in 149ms
+[01:23:37.509] Server  LOG      ✓ Compiled in 539ms
+[01:23:44.440] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:25:32.360] Server  LOG      ✓ Compiled in 357ms
+[01:27:01.162] Server  LOG      ✓ Compiled in 456ms
+[01:28:34.994] Server  LOG      ✓ Compiled in 106ms
+[01:30:59.174] Server  LOG      ✓ Compiled in 163ms
+[03:12:10.188] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[03:35:29.524] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
