@@ -24,3 +24,6 @@
 [01:30:59.174] Server  LOG      ✓ Compiled in 163ms
 [03:12:10.188] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
 [03:35:29.524] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:38:12.703] Server  LOG        Reload env: .env.local
+[05:38:15.429] Server  LOG        Reload env: .env.local
+[05:44:40.039] Server  LOG      ✓ Compiled in 1150ms
