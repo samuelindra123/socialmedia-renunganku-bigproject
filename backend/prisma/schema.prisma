@@ -45,6 +45,8 @@ model Profile {
   
   username        String   @unique
   profileImageUrl String?
+  backgroundImageUrl String?
+  websites        String[] @default([])
   umur            Int
   tanggalLahir    DateTime
   tempatKelahiran String
