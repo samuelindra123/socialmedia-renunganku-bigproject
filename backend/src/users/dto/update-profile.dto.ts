@@ -44,8 +44,10 @@ export class UpdateProfileDto {
     if (typeof value === 'string') {
       try {
         return JSON.parse(value);
-      } catch {
-        return [];
+      } catch (error) {
+        // If parsing fails, assume it's a single URL or invalid data
+        // Validation will catch invalid URLs
+        return value.trim() ? [value] : [];
       }
     }
     return value;

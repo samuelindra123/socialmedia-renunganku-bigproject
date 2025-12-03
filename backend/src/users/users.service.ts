@@ -170,7 +170,7 @@ export class UsersService {
           profileImageUrl,
           backgroundImageUrl,
           websites:
-            dto.websites !== undefined ? dto.websites : user.profile.websites,
+            dto.websites ?? user.profile.websites,
           umur: umur || user.profile.umur,
           tanggalLahir: dto.tanggalLahir
             ? new Date(dto.tanggalLahir)
