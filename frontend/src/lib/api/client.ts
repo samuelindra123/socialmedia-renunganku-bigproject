@@ -17,15 +17,21 @@ apiClient.interceptors.request.use(
     const lsToken = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null;
     const cookieToken = Cookies.get('token');
     const token = lsToken || cookieToken || null;
+
+    const headers = (config.headers ?? {}) as any;
+
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      headers.Authorization = `Bearer ${token}`;
     }
+
     if (typeof window !== 'undefined') {
       const sessionToken = localStorage.getItem('session_token');
       if (sessionToken) {
-        (config.headers ??= {})['x-session-token'] = sessionToken;
+        headers['x-session-token'] = sessionToken;
       }
     }
+
+    config.headers = headers;
     return config;
   },
   (error) => {

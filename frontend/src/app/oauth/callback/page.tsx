@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Cookies from "js-cookie";
 import { Loader2 } from "lucide-react";
 import useAuthStore from "@/store/auth";
 
-export default function OAuthCallbackPage() {
+function OAuthCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [message, setMessage] = useState("Menyiapkan sesi aman...");
@@ -50,5 +50,23 @@ export default function OAuthCallbackPage() {
         <p className="text-xs text-slate-400">Jangan tutup jendela ini, kami sedang mengamankan akunmu.</p>
       </div>
     </div>
+  );
+}
+
+export default function OAuthCallbackPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 px-6">
+          <div className="rounded-3xl bg-white shadow-xl p-10 text-center space-y-4">
+            <Loader2 className="mx-auto h-10 w-10 animate-spin text-slate-900" />
+            <p className="text-sm font-semibold text-slate-700">Menyiapkan sesi aman...</p>
+            <p className="text-xs text-slate-400">Jangan tutup jendela ini, kami sedang mengamankan akunmu.</p>
+          </div>
+        </div>
+      }
+    >
+      <OAuthCallbackContent />
+    </Suspense>
   );
 }

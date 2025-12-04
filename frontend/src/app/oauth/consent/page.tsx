@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Cookies from "js-cookie";
 import { Loader2 } from "lucide-react";
@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import { apiClient } from "@/lib/api/client";
 import useAuthStore from "@/store/auth";
 
-export default function GoogleConsentPage() {
+function GoogleConsentContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -137,5 +137,22 @@ export default function GoogleConsentPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function GoogleConsentPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
+          <div className="w-full max-w-md rounded-3xl bg-white shadow-xl p-8 flex flex-col items-center gap-4">
+            <Loader2 className="h-6 w-6 animate-spin text-slate-900" />
+            <p className="text-sm text-slate-600 font-medium">Menyiapkan halaman konfirmasi Google...</p>
+          </div>
+        </div>
+      }
+    >
+      <GoogleConsentContent />
+    </Suspense>
   );
 }

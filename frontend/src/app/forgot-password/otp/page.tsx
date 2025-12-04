@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-hot-toast";
@@ -10,7 +10,7 @@ import { apiClient } from "@/lib/api/client";
 
 const OTP_LENGTH = 6;
 
-export default function ForgotPasswordOtpPage() {
+function ForgotPasswordOtpContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState<string | null>(null);
@@ -142,7 +142,9 @@ export default function ForgotPasswordOtpPage() {
               {otpValues.map((value, index) => (
                 <input
                   key={index}
-                  ref={(el) => (inputsRef.current[index] = el)}
+                  ref={(el) => {
+                    inputsRef.current[index] = el;
+                  }}
                   type="text"
                   inputMode="numeric"
                   maxLength={1}
@@ -201,5 +203,22 @@ export default function ForgotPasswordOtpPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ForgotPasswordOtpPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-white dark:bg-slate-950">
+          <div className="flex flex-col items-center gap-3 text-slate-600 dark:text-slate-300">
+            <Loader2 className="h-6 w-6 animate-spin" />
+            <p className="text-sm font-medium">Memuat halaman verifikasi OTP...</p>
+          </div>
+        </div>
+      }
+    >
+      <ForgotPasswordOtpContent />
+    </Suspense>
   );
 }
