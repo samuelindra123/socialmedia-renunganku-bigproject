@@ -8,8 +8,6 @@ import { UploadVideoDto } from './dto/upload-video.dto';
 
 describe('VideosService', () => {
   let service: VideosService;
-  let _prismaService: PrismaService;
-  let _storageService: VideoStorageService;
 
   const mockPrismaService = {
     video: {
@@ -57,9 +55,6 @@ describe('VideosService', () => {
     }).compile();
 
     service = module.get<VideosService>(VideosService);
-    _prismaService = module.get<PrismaService>(PrismaService);
-    _storageService = module.get<VideoStorageService>(VideoStorageService);
-
     jest.clearAllMocks();
   });
 

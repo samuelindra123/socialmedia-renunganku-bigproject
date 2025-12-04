@@ -87,7 +87,7 @@ Third line`;
       expect(errors.length).toBe(0);
     });
 
-    it('should transform comma-separated string to array', async () => {
+    it('should transform comma-separated string to array', () => {
       const dto = plainToInstance(UploadVideoDto, {
         tags: 'renungan,inspirasi,motivasi',
       });
@@ -95,7 +95,7 @@ Third line`;
       expect(dto.tags).toEqual(['renungan', 'inspirasi', 'motivasi']);
     });
 
-    it('should trim whitespace from tags', async () => {
+    it('should trim whitespace from tags', () => {
       const dto = plainToInstance(UploadVideoDto, {
         tags: ['  renungan  ', ' inspirasi ', 'motivasi '],
       });
@@ -103,7 +103,7 @@ Third line`;
       expect(dto.tags).toEqual(['renungan', 'inspirasi', 'motivasi']);
     });
 
-    it('should filter out empty tags', async () => {
+    it('should filter out empty tags', () => {
       const dto = plainToInstance(UploadVideoDto, {
         tags: ['renungan', '', '   ', 'inspirasi'],
       });
@@ -121,7 +121,7 @@ Third line`;
       expect(errors[0].constraints?.arrayMaxSize).toBeDefined();
     });
 
-    it('should handle mixed valid and empty tags from comma string', async () => {
+    it('should handle mixed valid and empty tags from comma string', () => {
       const dto = plainToInstance(UploadVideoDto, {
         tags: 'renungan,,  ,inspirasi,',
       });

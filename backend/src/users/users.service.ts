@@ -181,7 +181,7 @@ export class UsersService {
       if (profileImageUrl) {
         try {
           await this.spacesService.deleteFile(profileImageUrl);
-        } catch (error) {
+        } catch {
           // Ignore if file doesn't exist
         }
       }
@@ -200,7 +200,7 @@ export class UsersService {
     }
 
     // Update user data
-    const updatedUser = await this.prisma.user.update({
+    await this.prisma.user.update({
       where: { id: userId },
       data: {
         namaLengkap: dto.namaLengkap || user.namaLengkap,
@@ -221,8 +221,13 @@ export class UsersService {
         } else if (typeof dto.websites === 'string') {
           // Handle JSON string from FormData
           try {
-            const parsed = JSON.parse(dto.websites);
-            websitesArray = Array.isArray(parsed) ? parsed : [dto.websites];
+            const parsed: unknown = JSON.parse(dto.websites);
+            websitesArray = Array.isArray(parsed)
+              ? parsed.filter(
+                  (item): item is string =>
+                    typeof item === 'string' && item.trim().length > 0,
+                )
+              : [dto.websites];
           } catch {
             // If parsing fails, treat as single website
             websitesArray = [dto.websites];
@@ -322,7 +327,7 @@ export class UsersService {
     if (user.profile.backgroundProfileUrl) {
       try {
         await this.spacesService.deleteFile(user.profile.backgroundProfileUrl);
-      } catch (error) {
+      } catch {
         // Ignore if file doesn't exist
       }
     }

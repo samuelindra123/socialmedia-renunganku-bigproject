@@ -164,7 +164,9 @@ export class StoryThumbnailService {
     return new Promise((resolve, reject) => {
       ffmpeg(videoPath)
         .on('end', () => resolve())
-        .on('error', (err) => reject(err))
+        .on('error', (err) =>
+          reject(err instanceof Error ? err : new Error(String(err))),
+        )
         .screenshots({
           timestamps: ['00:00:00.500'],
           filename: basename(outputPath),
@@ -209,7 +211,9 @@ export class StoryThumbnailService {
           '-tune zerolatency',
         ])
         .on('end', () => resolve())
-        .on('error', (err) => reject(err))
+        .on('error', (err) =>
+          reject(err instanceof Error ? err : new Error(String(err))),
+        )
         .save(outputPath);
     });
   }
@@ -243,7 +247,7 @@ export class StoryThumbnailService {
     return new Promise((resolve, reject) => {
       ffmpeg.ffprobe(filePath, (err, metadata) => {
         if (err) {
-          reject(err);
+          reject(err instanceof Error ? err : new Error(String(err)));
           return;
         }
 

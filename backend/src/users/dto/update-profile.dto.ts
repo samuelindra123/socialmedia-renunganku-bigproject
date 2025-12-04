@@ -49,10 +49,19 @@ export class UpdateProfileDto {
           return parsed;
         }
       } catch {
-        return value;
+        return value as string;
       }
+
+      return value as string;
     }
-    return value;
+    if (
+      Array.isArray(value) &&
+      value.every((item) => typeof item === 'string')
+    ) {
+      return value;
+    }
+
+    return undefined;
   })
   websites?: string[] | string;
 }

@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { VideoStatus } from '@prisma/client';
 import * as fs from 'fs/promises';
 import * as path from 'path';
+import * as fsSync from 'fs';
 import type { Job } from 'bull';
 import { VideoStorageService } from './video-storage.service';
 import { VideoSegmenterService } from './services/video-segmenter.service';
@@ -10,6 +11,8 @@ import { ChunkEncoderService } from './services/chunk-encoder.service';
 import { ChunkJoinerService } from './services/chunk-joiner.service';
 import { InjectQueue } from '@nestjs/bull';
 import type { Queue } from 'bull';
+
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument */
 
 export const VIDEO_PROCESSING_JOB = 'compress-and-upload-video';
 export const CHUNK_ENCODE_JOB = 'encode-chunk';
@@ -65,10 +68,11 @@ export class ChunkBasedVideoProcessorService {
 
     this.logger.log(`🎬 Starting chunk-based processing for video ${videoId}`);
     this.logger.log(`📂 File path: ${filePath}`);
+    this.logger.log(
+      `👤 User ${userId} started processing original file ${originalName}`,
+    );
 
     // Verify file exists before processing
-    const fs = require('fs').promises;
-    const fsSync = require('fs');
     if (!fsSync.existsSync(filePath)) {
       throw new Error(`File not found at start of processing: ${filePath}`);
     }
@@ -145,7 +149,7 @@ export class ChunkBasedVideoProcessorService {
       // Store tracker in Redis for chunk processors to update
       await this.saveChunkTracker(videoId, chunkTracker);
 
-      job.progress(50); // Segmentation + dispatch complete
+      void job.progress(50); // Segmentation + dispatch complete
 
       this.logger.log(
         `✅ Dispatched all encoding jobs. Workers will process in parallel.`,
@@ -205,7 +209,7 @@ export class ChunkBasedVideoProcessorService {
         await this.joinAndUploadQuality(videoId, quality, encodedDir);
       }
 
-      job.progress(((chunkIndex + 1) / totalChunks) * 100);
+      void job.progress(((chunkIndex + 1) / totalChunks) * 100);
     } catch (error) {
       this.logger.error(
         `Chunk ${chunkIndex} encoding failed: ${error.message}`,
