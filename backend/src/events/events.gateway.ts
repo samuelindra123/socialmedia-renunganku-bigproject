@@ -41,7 +41,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {
     if (data.userId) {
       this.connectedUsers.set(client.id, data.userId);
-      client.join(`user:${data.userId}`);
+      void client.join(`user:${data.userId}`);
       this.logger.log(`User ${data.userId} joined`);
     }
   }
@@ -49,44 +49,44 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   // Join feed room to receive new posts
   @SubscribeMessage('join-feed')
   handleJoinFeed(@ConnectedSocket() client: Socket) {
-    client.join('feed');
+    void client.join('feed');
     this.logger.log(`Client ${client.id} joined feed room`);
   }
 
   // Leave feed room
   @SubscribeMessage('leave-feed')
   handleLeaveFeed(@ConnectedSocket() client: Socket) {
-    client.leave('feed');
+    void client.leave('feed');
     this.logger.log(`Client ${client.id} left feed room`);
   }
 
   // === Emit methods to be called from services ===
 
   // Emit new post to all users in feed room
-  emitNewPost(post: any) {
-    this.server.to('feed').emit('new-post', post);
+  emitNewPost(post: { id?: string } & Record<string, unknown>) {
+    void this.server.to('feed').emit('new-post', post);
     this.logger.log(`Emitted new-post: ${post.id}`);
   }
 
   // Emit post update (like count, etc)
-  emitPostUpdate(postId: string, data: any) {
-    this.server.to('feed').emit('post-update', { postId, ...data });
+  emitPostUpdate(postId: string, data: Record<string, unknown>) {
+    void this.server.to('feed').emit('post-update', { postId, ...data });
   }
 
   // Emit new comment
-  emitNewComment(postId: string, comment: any) {
-    this.server.to('feed').emit('new-comment', { postId, comment });
+  emitNewComment(postId: string, comment: Record<string, unknown>) {
+    void this.server.to('feed').emit('new-comment', { postId, comment });
     this.logger.log(`Emitted new-comment for post ${postId}`);
   }
 
   // Emit post deleted
   emitPostDeleted(postId: string) {
-    this.server.to('feed').emit('post-deleted', { postId });
+    void this.server.to('feed').emit('post-deleted', { postId });
   }
 
   // Emit notification to specific user
-  emitNotification(userId: string, notification: any) {
-    this.server.to(`user:${userId}`).emit('notification', notification);
+  emitNotification(userId: string, notification: unknown) {
+    void this.server.to(`user:${userId}`).emit('notification', notification);
   }
 
   // Emit like update
@@ -96,7 +96,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     userId: string,
     liked: boolean,
   ) {
-    this.server
+    void this.server
       .to('feed')
       .emit('like-update', { postId, likesCount, userId, liked });
     this.logger.log(
@@ -112,7 +112,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     userId: string,
     liked: boolean,
   ) {
-    this.server.to('feed').emit('comment-like-update', {
+    void this.server.to('feed').emit('comment-like-update', {
       postId,
       commentId,
       likesCount,
@@ -126,7 +126,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   // Emit comment deleted
   emitCommentDeleted(postId: string, commentId: string) {
-    this.server.to('feed').emit('comment-deleted', { postId, commentId });
+    void this.server.to('feed').emit('comment-deleted', { postId, commentId });
     this.logger.log(`Emitted comment-deleted for comment ${commentId}`);
   }
 }

@@ -17,18 +17,24 @@ export class BookmarksController {
   constructor(private bookmarksService: BookmarksService) {}
 
   @Post(':postId')
-  bookmarkPost(@Request() req, @Param('postId') postId: string) {
+  bookmarkPost(
+    @Request() req: { user: { id: string } },
+    @Param('postId') postId: string,
+  ) {
     return this.bookmarksService.bookmarkPost(req.user.id, postId);
   }
 
   @Delete(':postId')
-  unbookmarkPost(@Request() req, @Param('postId') postId: string) {
+  unbookmarkPost(
+    @Request() req: { user: { id: string } },
+    @Param('postId') postId: string,
+  ) {
     return this.bookmarksService.unbookmarkPost(req.user.id, postId);
   }
 
   @Get()
   getMyBookmarks(
-    @Request() req,
+    @Request() req: { user: { id: string } },
     @Query('page') page: string = '1',
     @Query('limit') limit: string = '10',
   ) {
@@ -40,7 +46,10 @@ export class BookmarksController {
   }
 
   @Get('check/:postId')
-  checkBookmarkStatus(@Request() req, @Param('postId') postId: string) {
+  checkBookmarkStatus(
+    @Request() req: { user: { id: string } },
+    @Param('postId') postId: string,
+  ) {
     return this.bookmarksService.checkBookmarkStatus(req.user.id, postId);
   }
 }

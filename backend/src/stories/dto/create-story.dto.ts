@@ -5,7 +5,6 @@ import {
   IsNotEmpty,
   IsArray,
   ValidateNested,
-  IsUrl,
   IsNumber,
   Max,
 } from 'class-validator';

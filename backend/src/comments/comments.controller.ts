@@ -22,7 +22,7 @@ export class CommentsController {
 
   @Post('posts/:postId')
   createComment(
-    @Request() req,
+    @Request() req: { user: { id: string } },
     @Param('postId') postId: string,
     @Body() dto: CreateCommentDto,
   ) {
@@ -31,7 +31,7 @@ export class CommentsController {
 
   @Get('posts/:postId')
   getPostComments(
-    @Request() req,
+    @Request() req: { user?: { id: string } },
     @Param('postId') postId: string,
     @Query('page') page: string = '1',
     @Query('limit') limit: string = '20',
@@ -45,13 +45,16 @@ export class CommentsController {
   }
 
   @Get(':commentId/replies')
-  getCommentReplies(@Request() req, @Param('commentId') commentId: string) {
+  getCommentReplies(
+    @Request() req: { user?: { id: string } },
+    @Param('commentId') commentId: string,
+  ) {
     return this.commentsService.getCommentReplies(commentId, req.user?.id);
   }
 
   @Put(':commentId')
   updateComment(
-    @Request() req,
+    @Request() req: { user: { id: string } },
     @Param('commentId') commentId: string,
     @Body() dto: UpdateCommentDto,
   ) {
@@ -59,7 +62,10 @@ export class CommentsController {
   }
 
   @Delete(':commentId')
-  deleteComment(@Request() req, @Param('commentId') commentId: string) {
+  deleteComment(
+    @Request() req: { user: { id: string } },
+    @Param('commentId') commentId: string,
+  ) {
     return this.commentsService.deleteComment(req.user.id, commentId);
   }
 }

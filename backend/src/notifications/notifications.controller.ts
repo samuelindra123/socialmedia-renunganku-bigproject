@@ -18,7 +18,7 @@ export class NotificationsController {
 
   @Get()
   getMyNotifications(
-    @Request() req,
+    @Request() req: { user: { id: string } },
     @Query('page') page: string = '1',
     @Query('limit') limit: string = '20',
   ) {
@@ -31,7 +31,7 @@ export class NotificationsController {
 
   @Get('follow')
   getFollowNotifications(
-    @Request() req,
+    @Request() req: { user: { id: string } },
     @Query('page') page: string = '1',
     @Query('limit') limit: string = '20',
   ) {
@@ -44,7 +44,7 @@ export class NotificationsController {
 
   @Get('messages')
   getMessageNotifications(
-    @Request() req,
+    @Request() req: { user: { id: string } },
     @Query('page') page: string = '1',
     @Query('limit') limit: string = '20',
   ) {
@@ -56,23 +56,26 @@ export class NotificationsController {
   }
 
   @Get('unread-count')
-  getUnreadCount(@Request() req) {
+  getUnreadCount(@Request() req: { user: { id: string } }) {
     return this.notificationsService.getUnreadCount(req.user.id);
   }
 
   @Put(':notificationId/read')
-  markAsRead(@Request() req, @Param('notificationId') notificationId: string) {
+  markAsRead(
+    @Request() req: { user: { id: string } },
+    @Param('notificationId') notificationId: string,
+  ) {
     return this.notificationsService.markAsRead(req.user.id, notificationId);
   }
 
   @Put('read-all')
-  markAllAsRead(@Request() req) {
+  markAllAsRead(@Request() req: { user: { id: string } }) {
     return this.notificationsService.markAllAsRead(req.user.id);
   }
 
   @Delete(':notificationId')
   deleteNotification(
-    @Request() req,
+    @Request() req: { user: { id: string } },
     @Param('notificationId') notificationId: string,
   ) {
     return this.notificationsService.deleteNotification(

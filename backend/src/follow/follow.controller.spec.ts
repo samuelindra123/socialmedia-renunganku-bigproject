@@ -1,5 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { FollowController } from './follow.controller';
+import { FollowService } from './follow.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 describe('FollowController', () => {
   let controller: FollowController;
@@ -7,7 +9,16 @@ describe('FollowController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [FollowController],
-    }).compile();
+      providers: [
+        {
+          provide: FollowService,
+          useValue: {},
+        },
+      ],
+    })
+      .overrideGuard(JwtAuthGuard)
+      .useValue({ canActivate: jest.fn(() => true) })
+      .compile();
 
     controller = module.get<FollowController>(FollowController);
   });

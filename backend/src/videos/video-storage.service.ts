@@ -95,10 +95,10 @@ export class VideoStorageService {
     await this.s3
       .deleteObject({ Bucket: this.bucket, Key: key })
       .promise()
-      .catch((error) => {
-        console.error(
-          `Gagal menghapus file ${key} dari Spaces: ${error.message}`,
-        );
+      .catch((error: unknown) => {
+        const message =
+          error instanceof Error ? error.message : 'Unknown error';
+        console.error(`Gagal menghapus file ${key} dari Spaces: ${message}`);
       });
   }
 

@@ -6,7 +6,25 @@ import {
 } from '@nestjs/websockets';
 import { JwtService } from '@nestjs/jwt';
 import { Logger } from '@nestjs/common';
-import { Server, Socket } from 'socket.io';
+import { DefaultEventsMap, Server, Socket } from 'socket.io';
+
+interface MessagesSocketData {
+  userId?: string;
+}
+
+type MessagesSocket = Socket<
+  DefaultEventsMap,
+  DefaultEventsMap,
+  DefaultEventsMap,
+  MessagesSocketData
+>;
+
+type MessagesServer = Server<
+  DefaultEventsMap,
+  DefaultEventsMap,
+  DefaultEventsMap,
+  MessagesSocketData
+>;
 
 @WebSocketGateway({
   namespace: '/messages',
@@ -19,29 +37,38 @@ export class MessagesGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
   @WebSocketServer()
-  server: Server;
+  server: MessagesServer;
 
   private readonly logger = new Logger(MessagesGateway.name);
   private readonly userRooms = new Map<string, Set<string>>();
 
   constructor(private readonly jwtService: JwtService) {}
 
-  async handleConnection(client: Socket) {
+  async handleConnection(client: MessagesSocket) {
     try {
-      const token =
-        client.handshake.auth.token ||
-        client.handshake.headers.authorization?.split(' ')[1];
+      const authTokenRaw = client.handshake.auth?.token as unknown;
+      const authHeaderRaw = client.handshake.headers.authorization as unknown;
 
-      if (!token) {
+      const authToken =
+        typeof authTokenRaw === 'string' ? authTokenRaw : undefined;
+
+      const bearerToken =
+        typeof authHeaderRaw === 'string'
+          ? authHeaderRaw.split(' ')[1]
+          : undefined;
+
+      const token = authToken || bearerToken;
+
+      if (!token || typeof token !== 'string') {
         client.disconnect();
         return;
       }
 
-      const payload = await this.jwtService.verifyAsync(token);
+      const payload = await this.jwtService.verifyAsync<{ sub: string }>(token);
       const userId = payload.sub;
 
       client.data.userId = userId;
-      client.join(`user:${userId}`);
+      void client.join(`user:${userId}`);
       const rooms = this.userRooms.get(userId) ?? new Set<string>();
       rooms.add(client.id);
       this.userRooms.set(userId, rooms);
@@ -50,12 +77,14 @@ export class MessagesGateway
         `Messages socket connected ${client.id} (user: ${userId})`,
       );
     } catch (error) {
-      this.logger.error('Messages gateway connection error', error.message);
+      const message =
+        error instanceof Error ? error.message : 'Unknown gateway error';
+      this.logger.error('Messages gateway connection error', message);
       client.disconnect();
     }
   }
 
-  handleDisconnect(client: Socket) {
+  handleDisconnect(client: MessagesSocket) {
     const userId = client.data.userId;
     if (!userId) {
       return;
@@ -76,7 +105,7 @@ export class MessagesGateway
     );
   }
 
-  emitMessageToUser(userId: string, payload: any) {
+  emitMessageToUser(userId: string, payload: unknown) {
     this.server.to(`user:${userId}`).emit('message:new', payload);
   }
 }

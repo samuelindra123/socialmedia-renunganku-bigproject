@@ -9,4 +9,6 @@ try {
     stdio: 'inherit',
     cwd: process.cwd(),
   });
-} catch {}
+} catch (error) {
+  console.error('Failed to run prisma migrations for e2e tests', error);
+}

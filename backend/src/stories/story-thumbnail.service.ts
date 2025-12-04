@@ -4,6 +4,8 @@ import { join, basename, dirname } from 'path';
 import ffmpeg from 'fluent-ffmpeg';
 import { SpacesService } from '../spaces/spaces.service';
 
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access */
+
 const ffmpegBinary = require('@ffmpeg-installer/ffmpeg');
 const ffprobeBinary = require('@ffprobe-installer/ffprobe');
 
@@ -54,8 +56,10 @@ export class StoryThumbnailService {
       ]);
 
       return { thumbnailUrl, previewUrl };
-    } catch (error) {
-      console.error('Failed to generate story assets:', error.message);
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : 'Unknown asset error';
+      console.error('Failed to generate story assets:', message);
       return { thumbnailUrl: null, previewUrl: null };
     } finally {
       // Cleanup temp files
@@ -98,8 +102,10 @@ export class StoryThumbnailService {
         'story-thumbnails',
       );
       return thumbnailUrl;
-    } catch (error) {
-      console.error('Failed to generate thumbnail:', error.message);
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : 'Unknown thumbnail error';
+      console.error('Failed to generate thumbnail:', message);
       return null;
     }
   }
@@ -140,8 +146,10 @@ export class StoryThumbnailService {
         `📱 Story preview generated: ${(previewBuffer.length / 1024).toFixed(0)}KB`,
       );
       return previewUrl;
-    } catch (error) {
-      console.error('Failed to generate preview:', error.message);
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : 'Unknown preview error';
+      console.error('Failed to generate preview:', message);
       return null;
     }
   }

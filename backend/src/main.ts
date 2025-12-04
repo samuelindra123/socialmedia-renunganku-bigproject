@@ -78,4 +78,4 @@ async function bootstrap() {
     `🌐 CORS enabled for: ${process.env.FRONTEND_URL || 'http://localhost:3000'}\n`,
   );
 }
-bootstrap();
+void bootstrap();

@@ -3,7 +3,7 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { FollowStatus } from '@prisma/client';
+import { FollowStatus, Story } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { SpacesService } from '../spaces/spaces.service';
 import { StoryThumbnailService } from './story-thumbnail.service';
@@ -51,7 +51,7 @@ export class StoriesService {
       throw new BadRequestException('Maksimal 10 story per upload');
     }
 
-    const stories: any[] = [];
+    const stories: unknown[] = [];
     const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
     for (const item of dto.media) {
@@ -101,9 +101,11 @@ export class StoriesService {
             `Durasi video terlalu panjang. Maksimal ${MAX_STORY_VIDEO_DURATION_SECONDS / 60} menit`,
           );
         }
-      } catch (err) {
+      } catch (err: unknown) {
         if (err instanceof BadRequestException) throw err;
-        console.error('Failed to validate video duration:', err.message);
+        const message =
+          err instanceof Error ? err.message : 'Unknown validation error';
+        console.error('Failed to validate video duration:', message);
       }
     }
 
@@ -126,7 +128,7 @@ export class StoriesService {
 
     // Generate preview + thumbnail for video in background
     if (isVideo) {
-      this.thumbnailService
+      void this.thumbnailService
         .generateStoryAssets(file.buffer, file.originalname)
         .then(async (assets) => {
           // Update story with preview and thumbnail
@@ -144,8 +146,10 @@ export class StoriesService {
             console.log(`✅ Story ${story.id} preview ready`);
           }
         })
-        .catch((err) => {
-          console.error(`Failed to generate story assets: ${err.message}`);
+        .catch((err: unknown) => {
+          const message =
+            err instanceof Error ? err.message : 'Unknown thumbnail error';
+          console.error(`Failed to generate story assets: ${message}`);
         });
     }
 
@@ -197,9 +201,9 @@ export class StoriesService {
         acc: Record<string, { user: any; stories: any[]; hasUnseen: boolean }>,
         story,
       ) => {
-        const userId = story.userId;
-        if (!acc[userId]) {
-          acc[userId] = {
+        const ownerId = story.userId;
+        if (!acc[ownerId]) {
+          acc[ownerId] = {
             user: story.user,
             stories: [],
             hasUnseen: false,
@@ -207,9 +211,9 @@ export class StoriesService {
         }
 
         const isSeen = Array.isArray(story.views) && story.views.length > 0;
-        if (!isSeen) acc[userId].hasUnseen = true;
+        if (!isSeen) acc[ownerId].hasUnseen = true;
 
-        acc[userId].stories.push({
+        acc[ownerId].stories.push({
           ...story,
           isSeen,
         });
@@ -218,10 +222,15 @@ export class StoriesService {
       {},
     );
 
-    return Object.values(groupedStories).sort((a, b) => {
+    const groups = Object.entries(groupedStories).map(([ownerId, group]) => ({
+      ownerId,
+      ...group,
+    }));
+
+    return groups.sort((a, b) => {
       // Sort: Users with unseen stories first, then own story, then others
-      if (a.user.id === userId) return -1;
-      if (b.user.id === userId) return 1;
+      if (a.ownerId === userId) return -1;
+      if (b.ownerId === userId) return 1;
       if (a.hasUnseen && !b.hasUnseen) return -1;
       if (!a.hasUnseen && b.hasUnseen) return 1;
       return 0;
@@ -247,7 +256,7 @@ export class StoriesService {
           storyId,
         },
       });
-    } catch (error) {
+    } catch {
       // Ignore duplicate views
     }
 
@@ -272,7 +281,7 @@ export class StoriesService {
     // Delete from spaces
     try {
       await this.spacesService.deleteFile(story.mediaUrl);
-    } catch (e) {
+    } catch {
       // ignore
     }
 
@@ -296,7 +305,7 @@ export class StoriesService {
       throw new BadRequestException('Maksimal 10 file per upload');
     }
 
-    const stories: any[] = [];
+    const stories: Story[] = [];
 
     for (const file of files) {
       // Validate file size (max 15 MB)
@@ -323,9 +332,11 @@ export class StoriesService {
               `Durasi video "${file.originalname}" terlalu panjang. Maksimal ${MAX_STORY_VIDEO_DURATION_SECONDS / 60} menit`,
             );
           }
-        } catch (err) {
+        } catch (err: unknown) {
           if (err instanceof BadRequestException) throw err;
-          console.error('Failed to validate video duration:', err.message);
+          const message =
+            err instanceof Error ? err.message : 'Unknown validation error';
+          console.error('Failed to validate video duration:', message);
         }
       }
 

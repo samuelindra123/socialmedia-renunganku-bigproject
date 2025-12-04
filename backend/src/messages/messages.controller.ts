@@ -19,29 +19,35 @@ export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
 
   @Get('conversations')
-  getConversations(@Request() req) {
+  getConversations(@Request() req: { user: { id: string } }) {
     return this.messagesService.getConversations(req.user.id);
   }
 
   @Get('unread-count')
-  getUnreadCount(@Request() req) {
+  getUnreadCount(@Request() req: { user: { id: string } }) {
     return this.messagesService.getTotalUnreadCount(req.user.id);
   }
 
   @Get('conversation/find/:userId')
-  findOrCreateConversation(@Request() req, @Param('userId') userId: string) {
+  findOrCreateConversation(
+    @Request() req: { user: { id: string } },
+    @Param('userId') userId: string,
+  ) {
     return this.messagesService.findOrCreateConversation(req.user.id, userId);
   }
 
   @Post('send')
-  sendMessage(@Request() req, @Body() dto: SendMessageDto) {
+  sendMessage(
+    @Request() req: { user: { id: string } },
+    @Body() dto: SendMessageDto,
+  ) {
     return this.messagesService.sendMessage(req.user.id, dto);
   }
 
   @Post('send-with-media')
   @UseInterceptors(FileInterceptor('file'))
   async sendMessageWithMedia(
-    @Request() req,
+    @Request() req: { user: { id: string } },
     @UploadedFile() file: Express.Multer.File,
     @Body() dto: SendMessageDto,
   ) {
@@ -49,13 +55,16 @@ export class MessagesController {
   }
 
   @Post(':messageId/delivered')
-  markAsDelivered(@Request() req, @Param('messageId') messageId: string) {
+  markAsDelivered(
+    @Request() req: { user: { id: string } },
+    @Param('messageId') messageId: string,
+  ) {
     return this.messagesService.markAsDelivered(messageId, req.user.id);
   }
 
   @Delete(':messageId')
   deleteMessage(
-    @Request() req,
+    @Request() req: { user: { id: string } },
     @Param('messageId') messageId: string,
     @Query('forAll') forAll: string,
   ) {
@@ -68,7 +77,7 @@ export class MessagesController {
 
   @Get(':conversationId')
   getConversation(
-    @Request() req,
+    @Request() req: { user: { id: string } },
     @Param('conversationId') conversationId: string,
   ) {
     return this.messagesService.getConversationMessages(

@@ -5,11 +5,9 @@ import {
   MaxLength,
   Matches,
   IsDateString,
-  IsArray,
-  ValidateIf,
 } from 'class-validator';
 import { MinimumAge } from '../../common/validators/minimum-age.validator';
-import { Transform } from 'class-transformer';
+import { Transform, TransformFnParams } from 'class-transformer';
 
 export class UpdateProfileDto {
   @IsOptional()
@@ -40,10 +38,16 @@ export class UpdateProfileDto {
   bio?: string;
 
   @IsOptional()
-  @Transform(({ value }) => {
+  @Transform(({ value }: TransformFnParams) => {
     if (typeof value === 'string') {
       try {
-        return JSON.parse(value);
+        const parsed: unknown = JSON.parse(value);
+        if (
+          Array.isArray(parsed) &&
+          parsed.every((item) => typeof item === 'string')
+        ) {
+          return parsed;
+        }
       } catch {
         return value;
       }

@@ -1,5 +1,4 @@
 import {
-  IsNotEmpty,
   IsOptional,
   IsString,
   IsUUID,
@@ -15,12 +14,12 @@ export enum MediaType {
 }
 
 export class SendMessageDto {
-  @ValidateIf((o) => !o.conversationId)
+  @ValidateIf((o: SendMessageDto) => !o.conversationId)
   @IsUUID()
   @IsOptional()
   recipientId?: string;
 
-  @ValidateIf((o) => !o.recipientId)
+  @ValidateIf((o: SendMessageDto) => !o.recipientId)
   @IsUUID()
   @IsOptional()
   conversationId?: string;

@@ -1,5 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PostsController } from './posts.controller';
+import { PostsService } from './posts.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 describe('PostsController', () => {
   let controller: PostsController;
@@ -7,7 +9,16 @@ describe('PostsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PostsController],
-    }).compile();
+      providers: [
+        {
+          provide: PostsService,
+          useValue: {},
+        },
+      ],
+    })
+      .overrideGuard(JwtAuthGuard)
+      .useValue({ canActivate: jest.fn(() => true) })
+      .compile();
 
     controller = module.get<PostsController>(PostsController);
   });

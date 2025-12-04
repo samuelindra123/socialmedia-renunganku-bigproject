@@ -68,7 +68,6 @@ export class MessagesService {
         (p) => p.userId !== userId,
       );
       const lastMessage = conv.messages[0] || null;
-      const myParticipant = conv.participants.find((p) => p.userId === userId);
 
       // Count unread messages (messages from other user that are not READ)
       const unreadCount =
@@ -373,7 +372,7 @@ export class MessagesService {
     return this.sendMessage(senderId, {
       ...dto,
       mediaUrl,
-      mediaType: mediaType as any,
+      mediaType: mediaType as SendMessageDto['mediaType'],
       fileName: file.originalname,
     });
   }

@@ -20,17 +20,23 @@ export class FollowController {
   constructor(private followService: FollowService) {}
 
   @Get('mutuals')
-  getMutualFollows(@Request() req) {
+  getMutualFollows(@Request() req: { user: { id: string } }) {
     return this.followService.getMutualFollows(req.user.id);
   }
 
   @Post('request')
-  requestFollow(@Request() req, @Body() dto: FollowRequestDto) {
+  requestFollow(
+    @Request() req: { user: { id: string } },
+    @Body() dto: FollowRequestDto,
+  ) {
     return this.followService.requestFollow(req.user.id, dto.username);
   }
 
   @Post('accept')
-  acceptFollow(@Request() req, @Body() dto: FollowActionDto) {
+  acceptFollow(
+    @Request() req: { user: { id: string } },
+    @Body() dto: FollowActionDto,
+  ) {
     return this.followService.acceptFollowRequest(
       req.user.id,
       dto.followRequestId,
@@ -38,7 +44,10 @@ export class FollowController {
   }
 
   @Post('reject')
-  rejectFollow(@Request() req, @Body() dto: FollowActionDto) {
+  rejectFollow(
+    @Request() req: { user: { id: string } },
+    @Body() dto: FollowActionDto,
+  ) {
     return this.followService.rejectFollowRequest(
       req.user.id,
       dto.followRequestId,
@@ -46,7 +55,10 @@ export class FollowController {
   }
 
   @Delete(':username')
-  unfollowUser(@Request() req, @Param('username') username: string) {
+  unfollowUser(
+    @Request() req: { user: { id: string } },
+    @Param('username') username: string,
+  ) {
     return this.followService.unfollowUser(req.user.id, username);
   }
 
@@ -77,7 +89,10 @@ export class FollowController {
   }
 
   @Get('check/:username')
-  checkFollowStatus(@Request() req, @Param('username') username: string) {
+  checkFollowStatus(
+    @Request() req: { user: { id: string } },
+    @Param('username') username: string,
+  ) {
     return this.followService.checkFollowStatus(req.user.id, username);
   }
 

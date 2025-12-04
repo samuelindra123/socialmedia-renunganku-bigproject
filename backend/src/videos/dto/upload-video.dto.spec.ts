@@ -56,14 +56,16 @@ Third line`;
       expect(dto.description?.split('\n').length).toBe(3);
     });
 
-    it('should fail with description exceeding 1000 characters', async () => {
+    it('should fail with description exceeding max word count', async () => {
+      const longDescription = Array.from({ length: 10001 }, () => 'word').join(
+        ' ',
+      );
       const dto = plainToInstance(UploadVideoDto, {
-        description: 'a'.repeat(1001),
+        description: longDescription,
       });
 
       const errors = await validate(dto);
       expect(errors.length).toBeGreaterThan(0);
-      expect(errors[0].constraints?.maxLength).toContain('1000');
     });
   });
 

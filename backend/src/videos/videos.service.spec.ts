@@ -8,8 +8,8 @@ import { UploadVideoDto } from './dto/upload-video.dto';
 
 describe('VideosService', () => {
   let service: VideosService;
-  let prismaService: PrismaService;
-  let storageService: VideoStorageService;
+  let _prismaService: PrismaService;
+  let _storageService: VideoStorageService;
 
   const mockPrismaService = {
     video: {
@@ -25,7 +25,7 @@ describe('VideosService', () => {
     hashtag: {
       upsert: jest.fn(),
     },
-    $transaction: jest.fn((fn) => fn(mockPrismaService)),
+    $transaction: jest.fn(),
   };
 
   const mockStorageService = {
@@ -57,8 +57,8 @@ describe('VideosService', () => {
     }).compile();
 
     service = module.get<VideosService>(VideosService);
-    prismaService = module.get<PrismaService>(PrismaService);
-    storageService = module.get<VideoStorageService>(VideoStorageService);
+    _prismaService = module.get<PrismaService>(PrismaService);
+    _storageService = module.get<VideoStorageService>(VideoStorageService);
 
     jest.clearAllMocks();
   });
@@ -76,7 +76,11 @@ describe('VideosService', () => {
 
     it('should throw BadRequestException when files is null', async () => {
       await expect(
-        service.enqueueUploads('user-id', null as any, {} as UploadVideoDto),
+        service.enqueueUploads(
+          'user-id',
+          null as unknown as Express.Multer.File[],
+          {} as UploadVideoDto,
+        ),
       ).rejects.toThrow(BadRequestException);
     });
   });

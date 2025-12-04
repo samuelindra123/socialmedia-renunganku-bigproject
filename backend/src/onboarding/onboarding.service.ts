@@ -29,7 +29,7 @@ export class OnboardingService {
     if (user.profile?.profileImageUrl) {
       try {
         await this.spacesService.deleteFile(user.profile.profileImageUrl);
-      } catch (error) {
+      } catch {
         // Ignore error if file doesn't exist
       }
     }

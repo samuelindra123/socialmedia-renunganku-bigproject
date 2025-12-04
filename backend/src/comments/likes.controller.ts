@@ -15,12 +15,18 @@ export class CommentsLikesController {
   constructor(private svc: CommentsLikesService) {}
 
   @Post(':commentId')
-  like(@Request() req, @Param('commentId') commentId: string) {
+  like(
+    @Request() req: { user: { id: string } },
+    @Param('commentId') commentId: string,
+  ) {
     return this.svc.like(req.user.id, commentId);
   }
 
   @Delete(':commentId')
-  unlike(@Request() req, @Param('commentId') commentId: string) {
+  unlike(
+    @Request() req: { user: { id: string } },
+    @Param('commentId') commentId: string,
+  ) {
     return this.svc.unlike(req.user.id, commentId);
   }
 }

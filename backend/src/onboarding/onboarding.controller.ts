@@ -19,18 +19,24 @@ export class OnboardingController {
   constructor(private onboardingService: OnboardingService) {}
 
   @Get('status')
-  getStatus(@Request() req) {
+  getStatus(@Request() req: { user: { id: string } }) {
     return this.onboardingService.getOnboardingStatus(req.user.id);
   }
 
   @Post('upload-profile')
   @UseInterceptors(FileInterceptor('file'))
-  uploadProfile(@Request() req, @UploadedFile() file: Express.Multer.File) {
+  uploadProfile(
+    @Request() req: { user: { id: string } },
+    @UploadedFile() file: Express.Multer.File,
+  ) {
     return this.onboardingService.uploadProfileImage(req.user.id, file);
   }
 
   @Post('complete')
-  completeProfile(@Request() req, @Body() dto: CompleteProfileDto) {
+  completeProfile(
+    @Request() req: { user: { id: string } },
+    @Body() dto: CompleteProfileDto,
+  ) {
     return this.onboardingService.completeProfile(req.user.id, dto);
   }
 }

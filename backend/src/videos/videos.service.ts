@@ -17,6 +17,7 @@ import {
 } from './queues/video-queues.module';
 import { VideoStorageService } from './video-storage.service';
 import { countWords, MAX_CONTENT_WORDS } from '../common/utils/word-count';
+import { statSync } from 'fs';
 
 const MAX_VIDEO_SIZE = 100 * 1024 * 1024;
 const ALLOWED_MIME = [
@@ -58,14 +59,12 @@ export class VideosService {
     }
 
     const responses: VideoResponseDto[] = [];
-    const fs = require('fs');
-    const path = require('path');
 
     for (const file of files) {
       this.ensureValidFile(file);
 
       // Get basic metadata
-      const stats = fs.statSync(file.path);
+      const stats = statSync(file.path);
 
       // 🚀 INSTANT PREVIEW STRATEGY - Upload original FIRST
       // User dapat langsung menonton video original tanpa menunggu encoding

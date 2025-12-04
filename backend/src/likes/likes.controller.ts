@@ -17,12 +17,18 @@ export class LikesController {
   constructor(private likesService: LikesService) {}
 
   @Post('posts/:postId')
-  likePost(@Request() req, @Param('postId') postId: string) {
+  likePost(
+    @Request() req: { user: { id: string } },
+    @Param('postId') postId: string,
+  ) {
     return this.likesService.likePost(req.user.id, postId);
   }
 
   @Delete('posts/:postId')
-  unlikePost(@Request() req, @Param('postId') postId: string) {
+  unlikePost(
+    @Request() req: { user: { id: string } },
+    @Param('postId') postId: string,
+  ) {
     return this.likesService.unlikePost(req.user.id, postId);
   }
 
@@ -40,7 +46,10 @@ export class LikesController {
   }
 
   @Get('check/:postId')
-  checkLikeStatus(@Request() req, @Param('postId') postId: string) {
+  checkLikeStatus(
+    @Request() req: { user: { id: string } },
+    @Param('postId') postId: string,
+  ) {
     return this.likesService.checkLikeStatus(req.user.id, postId);
   }
 }

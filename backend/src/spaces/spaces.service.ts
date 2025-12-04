@@ -57,7 +57,6 @@ export class SpacesService {
     const isVideoUpload =
       folder === 'videos' ||
       (folder === 'stories' && file.mimetype.startsWith('video/'));
-    const isImageUpload = file.mimetype.startsWith('image/');
 
     // For stories folder, allow both images and videos
     const isStoriesFolder = folder === 'stories';

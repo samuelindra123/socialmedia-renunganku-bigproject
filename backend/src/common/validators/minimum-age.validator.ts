@@ -9,7 +9,7 @@ import {
 @ValidatorConstraint({ async: false })
 export class MinimumAgeConstraint implements ValidatorConstraintInterface {
   validate(birthDate: Date, args: ValidationArguments) {
-    const [minAge] = args.constraints;
+    const [minAge] = args.constraints as [number];
 
     const today = new Date();
     const birth = new Date(birthDate);
@@ -28,7 +28,7 @@ export class MinimumAgeConstraint implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments) {
-    const [minAge] = args.constraints;
+    const [minAge] = args.constraints as [number];
     return `Umur minimal ${minAge} tahun`;
   }
 }
