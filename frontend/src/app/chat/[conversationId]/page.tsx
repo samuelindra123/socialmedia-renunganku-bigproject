@@ -13,7 +13,18 @@ import { useThemeStore, resolveEffectiveTheme } from "@/store/theme";
 import { useNotificationStore } from "@/store/notifications";
 import { io, Socket } from "socket.io-client";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const RAW_API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+
+function getBrowserApiBase() {
+  if (typeof window === 'undefined') return RAW_API_URL;
+  return window.location.protocol === 'https:'
+    ? RAW_API_URL.replace(/^http:\/\//, 'https://')
+    : RAW_API_URL;
+}
+
+function getBrowserWsBase() {
+  return getBrowserApiBase().replace(/\/api\/?$/, '');
+}
 
 interface MessageItem {
   id: string;
@@ -57,7 +68,7 @@ async function fetchConversation(conversationId: string): Promise<ConversationDa
 function getMediaUrl(url: string | null | undefined): string {
   if (!url) return '';
   if (url.startsWith('http://') || url.startsWith('https://')) return url;
-  return `${API_URL}${url}`;
+  return `${getBrowserApiBase()}${url}`;
 }
 
 export default function ChatPage() {
@@ -104,7 +115,8 @@ export default function ChatPage() {
   useEffect(() => {
     if (!token) return;
 
-    const newSocket = io(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/messages`, {
+    const wsBase = getBrowserWsBase();
+    const newSocket = io(`${wsBase}/messages`, {
       auth: { token },
       transports: ['websocket', 'polling'],
     });

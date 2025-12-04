@@ -6,7 +6,16 @@ import { io, Socket } from "socket.io-client";
 import useAuthStore from "@/store/auth";
 import { useNotificationStore } from "@/store/notifications";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const RAW_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+
+function getWsBaseUrl() {
+  const upgraded =
+    typeof window !== "undefined" && window.location.protocol === "https:"
+      ? RAW_API_URL.replace(/^http:\/\//, "https://")
+      : RAW_API_URL;
+
+  return upgraded.replace(/\/api\/?$/, "");
+}
 
 export function useRealtimeNotifications() {
   const { token, user } = useAuthStore();
@@ -21,8 +30,10 @@ export function useRealtimeNotifications() {
   useEffect(() => {
     if (!token || !user?.id) return;
 
+    const baseUrl = getWsBaseUrl();
+
     // Connect to notifications namespace
-    const notifSocket = io(`${API_URL}/notifications`, {
+    const notifSocket = io(`${baseUrl}/notifications`, {
       auth: { token },
       transports: ["websocket", "polling"],
     });
@@ -62,7 +73,8 @@ export function useRealtimeNotifications() {
     });
 
     // Connect to messages namespace
-    const msgSocket = io(`${API_URL}/messages`, {
+    const msgBaseUrl = getWsBaseUrl();
+    const msgSocket = io(`${msgBaseUrl}/messages`, {
       auth: { token },
       transports: ["websocket", "polling"],
     });
