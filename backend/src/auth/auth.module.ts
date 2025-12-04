@@ -18,9 +18,7 @@ import { GoogleAuthGuard } from './guards/google-auth.guard';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
         const expiresIn =
-          (config.get<JwtSignOptions['expiresIn']>('JWT_EXPIRATION') as
-            | JwtSignOptions['expiresIn']
-            | undefined) || '7d';
+          config.get<JwtSignOptions['expiresIn']>('JWT_EXPIRATION') || '7d';
 
         return {
           secret: config.get<string>('JWT_SECRET'),

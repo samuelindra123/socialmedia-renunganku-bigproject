@@ -31,7 +31,13 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     context: ExecutionContext,
     status?: any,
   ): TUser {
-    const result = super.handleRequest(err, user, info, context, status) as TUser | null;
+    const result = super.handleRequest(
+      err,
+      user,
+      info,
+      context,
+      status,
+    ) as TUser | null;
 
     if (
       result &&
