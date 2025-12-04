@@ -49,10 +49,10 @@ export class UpdateProfileDto {
           return parsed;
         }
       } catch {
-        return value as string;
+        return value;
       }
 
-      return value as string;
+      return value;
     }
     if (
       Array.isArray(value) &&

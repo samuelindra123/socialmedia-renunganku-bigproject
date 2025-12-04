@@ -6,12 +6,9 @@ import { basename, dirname, join } from 'path';
 import type { Job } from 'bull';
 import ffmpeg from 'fluent-ffmpeg';
 import { VideoStorageService } from './video-storage.service';
-import {
-  VIDEO_PROCESSING_JOB,
-  VideoProcessingJob,
-} from './queues/video-queues.module';
+import { VideoProcessingJob } from './queues/video-queues.module';
 
-/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-require-imports, @typescript-eslint/prefer-promise-reject-errors, @typescript-eslint/no-floating-promises */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-require-imports, @typescript-eslint/prefer-promise-reject-errors, @typescript-eslint/no-floating-promises, @typescript-eslint/no-unsafe-return */
 
 const ffmpegBinary = require('@ffmpeg-installer/ffmpeg');
 const ffprobeBinary = require('@ffprobe-installer/ffprobe');
@@ -119,7 +116,7 @@ export class VideoProcessorService {
    * 5. Generate 1080p if needed (35-60s) → Optional
    */
   async handleJob(job: Job<VideoProcessingJob>) {
-    const { videoId, postVideoId, filePath, mimeType } = job.data;
+    const { videoId, postVideoId, filePath } = job.data;
     const workDir = join(this.tempRoot, videoId);
 
     await fsPromises.mkdir(workDir, { recursive: true });
@@ -444,7 +441,9 @@ export class VideoProcessorService {
           const percent = Math.min(70, Math.round(progress.percent ?? 0));
           job.progress(percent);
         })
-        .on('error', (err) => reject(err))
+        .on('error', (err) =>
+          reject(err instanceof Error ? err : new Error(String(err))),
+        )
         .on('end', async () => {
           const meta = await this.probeVideo(outputPath);
           resolve(meta);
@@ -456,7 +455,9 @@ export class VideoProcessorService {
   private probeVideo(filePath: string): Promise<ProcessedMetadata> {
     return new Promise((resolve, reject) => {
       ffmpeg.ffprobe(filePath, (err, data) => {
-        if (err) return reject(err);
+        if (err) {
+          return reject(err instanceof Error ? err : new Error(String(err)));
+        }
         const videoStream = data.streams.find(
           (stream) => stream.width && stream.height,
         );
@@ -473,7 +474,9 @@ export class VideoProcessorService {
     return new Promise<void>((resolve, reject) => {
       ffmpeg(videoPath)
         .on('end', () => resolve())
-        .on('error', (err) => reject(err))
+        .on('error', (err) =>
+          reject(err instanceof Error ? err : new Error(String(err))),
+        )
         .screenshots({
           timestamps: ['00:00:01.000'],
           filename: basename(outputPath),

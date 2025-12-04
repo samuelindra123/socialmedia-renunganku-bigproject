@@ -4,9 +4,7 @@ import type { Job } from 'bull';
 import { VideoProcessorService } from '../video-processor.service';
 import {
   VIDEO_PROCESSING_JOB,
-  CHUNK_ENCODE_JOB,
   VideoProcessingJob,
-  ChunkEncodeJobData,
 } from './video-queues.module';
 
 /**
@@ -31,11 +29,11 @@ export class VideoProcessingProcessor {
     try {
       await this.processor.handleJob(job);
       this.logger.log(`Video job ${job.id} completed successfully`);
-    } catch (error) {
-      this.logger.error(
-        `Video job ${job.id} failed: ${error.message}`,
-        error.stack,
-      );
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : 'Unknown video job error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Video job ${job.id} failed: ${message}`, stack);
       throw error;
     }
   }

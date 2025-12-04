@@ -5,6 +5,8 @@ import ffmpeg from 'fluent-ffmpeg';
 import * as path from 'path';
 import * as fs from 'fs/promises';
 
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument */
+
 // Set FFmpeg paths
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 ffmpeg.setFfprobePath(ffprobeInstaller.path);
@@ -88,7 +90,7 @@ export class ChunkEncoderService {
     const outputPath = path.join(qualityDir, `${chunkName}_${quality}.ts`);
 
     this.logger.debug(
-      `Encoding chunk ${chunkIndex} to ${quality} (preset: ${profile.preset})`,
+      `Encoding chunk ${chunkIndex} for video ${videoId} to ${quality} (preset: ${profile.preset})`,
     );
 
     try {
@@ -100,9 +102,11 @@ export class ChunkEncoderService {
         outputPath,
         success: true,
       };
-    } catch (error) {
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : 'Unknown encoding error';
       this.logger.error(
-        `Failed to encode chunk ${chunkIndex} to ${quality}: ${error.message}`,
+        `Failed to encode chunk ${chunkIndex} to ${quality}: ${message}`,
       );
       return {
         chunkIndex,
@@ -144,7 +148,7 @@ export class ChunkEncoderService {
           resolve();
         })
         .on('error', (err) => {
-          reject(err);
+          reject(err instanceof Error ? err : new Error(String(err)));
         })
         .run();
     });
@@ -160,7 +164,7 @@ export class ChunkEncoderService {
     return new Promise((resolve, reject) => {
       ffmpeg.ffprobe(filePath, (err, metadata) => {
         if (err) {
-          reject(err);
+          reject(err instanceof Error ? err : new Error(String(err)));
         } else {
           const videoStream = metadata.streams.find(
             (s) => s.codec_type === 'video',

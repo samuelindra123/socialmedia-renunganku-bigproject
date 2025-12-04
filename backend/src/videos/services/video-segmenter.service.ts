@@ -5,6 +5,8 @@ import ffmpeg from 'fluent-ffmpeg';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
+/* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument */
+
 // Set FFmpeg paths
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 ffmpeg.setFfprobePath(ffprobeInstaller.path);
@@ -68,8 +70,11 @@ export class VideoSegmenterService {
         segmentDir,
         duration,
       };
-    } catch (error) {
-      this.logger.error(`Segmentation failed: ${error.message}`, error.stack);
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : 'Unknown segmentation error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Segmentation failed: ${message}`, stack);
       // Cleanup on failure
       await this.cleanup(segmentDir);
       throw error;
@@ -83,7 +88,7 @@ export class VideoSegmenterService {
     return new Promise((resolve, reject) => {
       ffmpeg.ffprobe(filePath, (err, metadata) => {
         if (err) {
-          reject(err);
+          reject(err instanceof Error ? err : new Error(String(err)));
         } else {
           resolve(metadata.format.duration || 0);
         }
@@ -127,7 +132,7 @@ export class VideoSegmenterService {
         })
         .on('error', (err) => {
           this.logger.error(`Segmentation error: ${err.message}`);
-          reject(err);
+          reject(err instanceof Error ? err : new Error(String(err)));
         })
         .run();
     });
@@ -152,8 +157,10 @@ export class VideoSegmenterService {
     try {
       await fs.rm(segmentDir, { recursive: true, force: true });
       this.logger.log(`Cleaned up segment directory: ${segmentDir}`);
-    } catch (error) {
-      this.logger.warn(`Cleanup failed: ${error.message}`);
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : 'Unknown cleanup error';
+      this.logger.warn(`Cleanup failed: ${message}`);
     }
   }
 }

@@ -5,6 +5,8 @@ import ffmpeg from 'fluent-ffmpeg';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
+/* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access */
+
 // Set FFmpeg paths
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 ffmpeg.setFfprobePath(ffprobeInstaller.path);
@@ -77,10 +79,10 @@ export class ChunkJoinerService {
         fileSize,
         success: true,
       };
-    } catch (error) {
-      this.logger.error(
-        `Failed to join chunks for ${quality}: ${error.message}`,
-      );
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : 'Unknown join error';
+      this.logger.error(`Failed to join chunks for ${quality}: ${message}`);
       return {
         quality,
         outputPath: '',
@@ -168,7 +170,7 @@ export class ChunkJoinerService {
         })
         .on('error', (err) => {
           this.logger.error(`Concat error: ${err.message}`);
-          reject(err);
+          reject(err instanceof Error ? err : new Error(String(err)));
         })
         // Change working directory before running
         .run();
@@ -183,8 +185,10 @@ export class ChunkJoinerService {
       const qualityDir = path.join(encodedDir, quality);
       await fs.rm(qualityDir, { recursive: true, force: true });
       this.logger.log(`Cleaned up chunks for ${quality}`);
-    } catch (error) {
-      this.logger.warn(`Cleanup failed for ${quality}: ${error.message}`);
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : 'Unknown cleanup error';
+      this.logger.warn(`Cleanup failed for ${quality}: ${message}`);
     }
   }
 }
