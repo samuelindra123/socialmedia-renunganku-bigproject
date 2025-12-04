@@ -8,4 +8,4 @@ import { SpacesModule } from '../spaces/spaces.module';
   controllers: [OnboardingController],
   providers: [OnboardingService],
 })
-export class OnboardingModule { }
+export class OnboardingModule {}

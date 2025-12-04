@@ -4,6 +4,8 @@ import { Notification } from '@/types';
 interface NotificationState {
   notifications: Notification[];
   unreadCount: number;
+  unreadMessageCount: number;
+  followRequestCount: number;
   
   // Actions
   setNotifications: (notifications: Notification[]) => void;
@@ -11,11 +13,19 @@ interface NotificationState {
   markAsRead: (id: string) => void;
   markAllAsRead: () => void;
   setUnreadCount: (count: number) => void;
+  incrementUnreadMessages: () => void;
+  resetUnreadMessages: () => void;
+  setUnreadMessageCount: (count: number) => void;
+  setFollowRequestCount: (count: number) => void;
+  incrementFollowRequests: () => void;
+  decrementFollowRequests: () => void;
 }
 
 export const useNotificationStore = create<NotificationState>((set) => ({
   notifications: [],
   unreadCount: 0,
+  unreadMessageCount: 0,
+  followRequestCount: 0,
 
   setNotifications: (notifications) => {
     set({ notifications });
@@ -46,5 +56,29 @@ export const useNotificationStore = create<NotificationState>((set) => ({
 
   setUnreadCount: (count) => {
     set({ unreadCount: count });
+  },
+
+  incrementUnreadMessages: () => {
+    set((state) => ({ unreadMessageCount: state.unreadMessageCount + 1 }));
+  },
+
+  resetUnreadMessages: () => {
+    set({ unreadMessageCount: 0 });
+  },
+
+  setUnreadMessageCount: (count) => {
+    set({ unreadMessageCount: count });
+  },
+
+  setFollowRequestCount: (count) => {
+    set({ followRequestCount: count });
+  },
+
+  incrementFollowRequests: () => {
+    set((state) => ({ followRequestCount: state.followRequestCount + 1 }));
+  },
+
+  decrementFollowRequests: () => {
+    set((state) => ({ followRequestCount: Math.max(0, state.followRequestCount - 1) }));
   },
 }));

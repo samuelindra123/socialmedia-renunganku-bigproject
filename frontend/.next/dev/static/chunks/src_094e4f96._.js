@@ -931,11 +931,11 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Logo$2e
 ;
 function Footer() {
     const $ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$compiler$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["c"])(15);
-    if ($[0] !== "94d312dcd387691af3014efa74219fe783409462d7719363a16c82abef8344ff") {
+    if ($[0] !== "166c3032813ff9f64eebea131b7945766dfb18a99a1be47cb2503cc2165d6710") {
         for(let $i = 0; $i < 15; $i += 1){
             $[$i] = Symbol.for("react.memo_cache_sentinel");
         }
-        $[0] = "94d312dcd387691af3014efa74219fe783409462d7719363a16c82abef8344ff";
+        $[0] = "166c3032813ff9f64eebea131b7945766dfb18a99a1be47cb2503cc2165d6710";
     }
     let t0;
     if ($[1] === Symbol.for("react.memo_cache_sentinel")) {
@@ -1362,7 +1362,7 @@ function Footer() {
             children: [
                 "© ",
                 currentYear,
-                " Renunganku Inc. Jakarta, Indonesia."
+                " Renunganku Inc. Malang, Indonesia."
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/Footer.tsx",

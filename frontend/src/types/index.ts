@@ -5,12 +5,16 @@ export interface User {
   namaLengkap: string;
   isEmailVerified: boolean;
   createdAt: string;
+  googleId?: string | null;
   profile?: Profile;
 }
 
 export interface Profile {
   username: string;
   profileImageUrl: string | null;
+  backgroundProfileUrl?: string | null;
+  bio?: string | null;
+  websites?: string[];
   umur: number;
   tanggalLahir: string;
   tempatKelahiran: string;
@@ -18,9 +22,22 @@ export interface Profile {
 }
 
 // Auth Types
+export interface SessionSummary {
+  id: string;
+  deviceName?: string | null;
+  ipAddress?: string | null;
+  lastSeen: string;
+  createdAt: string;
+}
+
+export interface LoginSession extends SessionSummary {
+  token: string;
+}
+
 export interface LoginResponse {
   accessToken: string;
   user: User;
+  session: LoginSession;
 }
 
 export interface RegisterData {
@@ -44,6 +61,7 @@ export interface Post {
     };
   };
   images: PostImage[];
+  videos?: PostVideo[]; // Added videos
   _count: {
     likes: number;
     comments: number;
@@ -51,6 +69,11 @@ export interface Post {
   };
   isLiked?: boolean;
   isBookmarked?: boolean;
+  title?: string; // Added title
+  type?: 'text' | 'media' | 'image' | 'video'; // Added type with image and video
+  hashtags?: string[]; // Added hashtags
+  links?: string[]; // Added links
+  isFollowing?: boolean; // Added isFollowing
 }
 
 export interface PostImage {
@@ -59,12 +82,41 @@ export interface PostImage {
   createdAt: string;
 }
 
+export interface PostVideo {
+  id: string;
+  url: string; // Deprecated - use originalUrl or processedUrl
+  originalUrl: string; // ⚡ For instant playback
+  processedUrl: string; // Current best quality URL
+  thumbnailUrl: string | null;
+  status: 'READY' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
+  qualityUrls: {
+    '144p'?: string;
+    '240p'?: string;
+    '360p'?: string;
+    '480p'?: string;
+    '720p'?: string;
+  } | null;
+  duration?: number;
+  width?: number;
+  height?: number;
+  createdAt: string;
+}
+
+// Video Types
+export enum VideoStatus {
+  READY = 'READY',
+  PROCESSING = 'PROCESSING',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED',
+}
+
 // Comment Types
 export interface Comment {
   id: string;
   content: string;
   createdAt: string;
   updatedAt: string;
+  userId?: string;
   user: {
     id: string;
     namaLengkap: string;
@@ -75,14 +127,16 @@ export interface Comment {
   };
   replies?: Comment[];
   _count?: {
-    replies: number;
+    likes?: number;
+    replies?: number;
   };
+  isLiked?: boolean;
 }
 
 // Notification Types
 export interface Notification {
   id: string;
-  type: 'LIKE' | 'COMMENT' | 'FOLLOW' | 'MENTION';
+  type: 'LIKE' | 'COMMENT' | 'FOLLOW' | 'MENTION' | 'FOLLOW_REQUEST' | 'FOLLOW_ACCEPTED' | 'MESSAGE';
   title: string;
   message: string;
   actionUrl: string | null;
@@ -96,6 +150,37 @@ export interface Notification {
       profileImageUrl: string | null;
     };
   };
+}
+
+export interface FollowRequest {
+  id: string;
+  requestedAt: string;
+  follower: {
+    id: string;
+    namaLengkap: string;
+    username?: string | null;
+    profileImageUrl?: string | null;
+  };
+}
+
+export type MessageNotification = Notification;
+
+// Blog Types
+export interface BlogPost {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: 'ProductAndVision' | 'Engineering' | 'Design' | 'Culture';
+  readTimeMinutes: number;
+  publishedAt: string | null;
+  authorName: string;
+  authorRole: string;
+  tags: string[];
+  status: 'DRAFT' | 'SCHEDULED' | 'PUBLISHED';
+  body: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // Story Types

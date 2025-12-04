@@ -6,4 +6,4 @@ import { LikesService } from './likes.service';
   controllers: [LikesController],
   providers: [LikesService],
 })
-export class LikesModule { }
+export class LikesModule {}

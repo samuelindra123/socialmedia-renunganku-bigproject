@@ -1,0 +1,658 @@
+[
+  {
+    "id": "TC001",
+    "title": "User Login Success",
+    "description": "Verify that a user can successfully log in with valid credentials and is redirected to their feed.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to login page"
+      },
+      {
+        "type": "action",
+        "description": "Enter valid username/email and password"
+      },
+      {
+        "type": "action",
+        "description": "Click the login button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify user is authenticated and redirected to the personalized feed page"
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure authentication tokens are properly stored in Zustand store"
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "User Login Failure with Invalid Credentials",
+    "description": "Verify that login with invalid credentials is rejected and an appropriate error message is shown.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to login page"
+      },
+      {
+        "type": "action",
+        "description": "Enter invalid username/email and/or password"
+      },
+      {
+        "type": "action",
+        "description": "Click the login button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify login fails and error notification/toast is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify user remains on login page and no authentication token is stored"
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Signup Workflow Success",
+    "description": "Verify a new user can successfully sign up, receives email verification step, and is authenticated upon verification.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to signup page"
+      },
+      {
+        "type": "action",
+        "description": "Enter valid new user details including email, username, and password"
+      },
+      {
+        "type": "action",
+        "description": "Submit signup form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify signup confirmation prompt for email verification is shown"
+      },
+      {
+        "type": "action",
+        "description": "Simulate email verification link click"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify user account is activated and user is redirected appropriately"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify authentication state is updated in Zustand store"
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Password Recovery Flow",
+    "description": "Verify that password recovery can be initiated and completed with reset email and password update.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to password recovery page"
+      },
+      {
+        "type": "action",
+        "description": "Enter registered email address"
+      },
+      {
+        "type": "action",
+        "description": "Submit password recovery request"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify password reset email is sent notification is displayed"
+      },
+      {
+        "type": "action",
+        "description": "Follow password reset link and enter new password"
+      },
+      {
+        "type": "action",
+        "description": "Submit new password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify password is updated and user can log in with new credentials"
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "Feed Post Card: Display Post with Media",
+    "description": "Verify that posts with various media types (images, video, GIFs) display correctly on Feed Post Card component.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Load personalized feed with posts containing images, videos, and GIFs"
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure all media assets are loaded and rendered with correct layout and controls"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify media playback controls function: play, pause, mute, unmute"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm media status indicators (e.g., playing, paused) are visible"
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Feed Post Card: Like and Unlike Post",
+    "description": "Validate liking and unliking a post updates UI instantly and synchronization with backend happens correctly.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "On a post in Feed Post Card, click like button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify like count increments immediately and button reflects liked state"
+      },
+      {
+        "type": "action",
+        "description": "Click like button again to unlike"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify like count decrements immediately and button reflects unliked state"
+      },
+      {
+        "type": "assertion",
+        "description": "Simulate backend failure and ensure optimistic UI reverts and error notification is shown"
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Feed Post Card: Comment Posting and Replying",
+    "description": "Verify that users can post new comments, reply to comments, and UI updates accordingly with rich text editor.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Open comments panel on a post"
+      },
+      {
+        "type": "action",
+        "description": "Input a new comment using the TipTap rich text editor with text and inline formatting"
+      },
+      {
+        "type": "action",
+        "description": "Submit comment"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify new comment appears immediately in the comments list"
+      },
+      {
+        "type": "action",
+        "description": "Click reply on an existing comment"
+      },
+      {
+        "type": "action",
+        "description": "Input reply comment with rich text editor"
+      },
+      {
+        "type": "action",
+        "description": "Submit reply"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify reply comment is nested under the original comment and rendered with formatting"
+      },
+      {
+        "type": "action",
+        "description": "Try submitting empty comment"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify validation error message is displayed and comment is not accepted"
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Feed Post Card: Like and Unlike Comments",
+    "description": "Validate liking and unliking comments in the comment thread with instant UI updates and error handling.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Open comments panel on a post"
+      },
+      {
+        "type": "action",
+        "description": "Like a comment"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify comment like count increments and button state updates instantly"
+      },
+      {
+        "type": "action",
+        "description": "Unlike the comment"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify comment like count decrements and button state updates instantly"
+      },
+      {
+        "type": "assertion",
+        "description": "Simulate backend failure and verify optimistic UI rollback with error notification"
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Post Creation: Text and Media Upload",
+    "description": "Verify the Create Post modal allows posting text content with rich formatting and uploading media files.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Open Create Post modal"
+      },
+      {
+        "type": "action",
+        "description": "Enter post text in rich text editor with multiple formats (bold, italic, links)"
+      },
+      {
+        "type": "action",
+        "description": "Upload supported media files (images, videos)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify preview of text and media displays correctly in the modal"
+      },
+      {
+        "type": "action",
+        "description": "Submit the post"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify post appears instantly in the feed and media is correctly rendered"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to upload unsupported file format"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify upload is rejected with proper validation message"
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "Post Editing and Deletion via Modal",
+    "description": "Test editing and deleting an existing post using modals, with UI updates and cache invalidation.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Open edit post modal from a post’s action menu"
+      },
+      {
+        "type": "action",
+        "description": "Modify the post content including text and media"
+      },
+      {
+        "type": "action",
+        "description": "Submit post update"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify updated post content appears on the feed immediately"
+      },
+      {
+        "type": "action",
+        "description": "Open delete post modal and confirm deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify post is removed from the feed instantly and caches are invalidated"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify UI displays success or error notifications based on API results"
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Follow and Unfollow User with Optimistic Update",
+    "description": "Verify that follow and unfollow actions on profile header perform optimistic UI updates with proper rollback on failure.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to a user profile page"
+      },
+      {
+        "type": "action",
+        "description": "Click follow button on profile header"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify follow button state changes immediately and follower count increments"
+      },
+      {
+        "type": "action",
+        "description": "Simulate backend failure response"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify follow button state reverts and error toast notification is shown"
+      },
+      {
+        "type": "action",
+        "description": "Click unfollow button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify unfollow button state changes immediately and follower count decrements"
+      },
+      {
+        "type": "action",
+        "description": "Simulate backend failure"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify UI reverts and error is notified"
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Profile Tabs Navigation and Content Display",
+    "description": "Verify user can successfully navigate profile tabs (posts, likes, etc) and content updates accordingly.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Open a user profile page"
+      },
+      {
+        "type": "action",
+        "description": "Click on 'Posts' tab"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify posts are displayed correctly"
+      },
+      {
+        "type": "action",
+        "description": "Click on 'Likes' tab"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify liked posts content is displayed correctly"
+      },
+      {
+        "type": "action",
+        "description": "Click other profile tabs"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify corresponding content is fetched and rendered without errors"
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Explore and Discover Pages with Pagination and Infinite Scroll",
+    "description": "Verify explore and discover pages load content accurately, handle pagination and infinite scrolling seamlessly.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Explore page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify initial set of content is loaded and displayed correctly"
+      },
+      {
+        "type": "action",
+        "description": "Scroll down to trigger infinite loading"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify new content batches load smoothly and appended to the list"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to Discover page and test tag and profile navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify filtered content loads and updates on selecting tags or profiles"
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "Static Marketing Pages Load and Navigation",
+    "description": "Verify that marketing and static content pages load correctly, display expected content, and all links work properly.",
+    "category": "functional",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to pricing, blog, roadmap, terms, privacy, and other marketing pages"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page content is rendered as per design and data"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify all internal and external links open successfully and navigation is seamless"
+      },
+      {
+        "type": "action",
+        "description": "Test page responsiveness on various screen sizes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify correct UI scaling and element positioning"
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "Authentication Route Guards and Redirects",
+    "description": "Verify protected routes are guarded for authenticated users and redirections are correct after login, logout, signup.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Attempt to access protected feed page without authentication"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify redirect to login page"
+      },
+      {
+        "type": "action",
+        "description": "Login successfully"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify redirect to originally requested protected page"
+      },
+      {
+        "type": "action",
+        "description": "Logout from the application"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify user is logged out, Zustand store cleared, and redirected to login or home page"
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "title": "Feed Sidebar Navigation and User Suggestions",
+    "description": "Verify sidebar navigation links and user suggestion components function properly and support interaction.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Load feed page and locate sidebar component"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify navigation links are correct and clickable"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify user suggestions list displays with correct user info"
+      },
+      {
+        "type": "action",
+        "description": "Click follow/unfollow button on user suggestion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify optimistic UI updates with proper error handling on failure"
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "title": "Post Like List Modal Display",
+    "description": "Verify that opening the likes modal for a post displays accurate list of users who liked the post.",
+    "category": "functional",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Click to open likes modal on a post"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify modal opens and displays a scrollable list of users who liked the post with profile information"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify modal can be closed correctly without affecting underlying feed"
+      }
+    ]
+  },
+  {
+    "id": "TC018",
+    "title": "Toast Notification Display and Behavior",
+    "description": "Verify toast notifications appear correctly after relevant user actions (errors, success) and auto-dismiss properly.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Trigger an action causing success notification (e.g., post creation)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify toast notification is displayed with correct message"
+      },
+      {
+        "type": "action",
+        "description": "Trigger an action causing error notification (e.g., failed follow request)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify error toast notification is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify toast notifications auto-dismiss after timeout"
+      }
+    ]
+  },
+  {
+    "id": "TC019",
+    "title": "API Client Integration with Axios",
+    "description": "Verify API client wrapper correctly handles backend API calls with success, error, and timeout scenarios.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Perform standard API calls for getting posts, creating posts, authenticating, following users"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify responses are handled correctly and data populates UI"
+      },
+      {
+        "type": "action",
+        "description": "Simulate API timeout and server error responses"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify error handling mechanisms trigger appropriate UI feedback"
+      }
+    ]
+  },
+  {
+    "id": "TC020",
+    "title": "End-to-End Critical Path Test: Login, Feed Interaction, Profile Navigation",
+    "description": "Run an automated end-to-end test covering logging in, interacting with feed posts (like, comment), and navigating to a user profile.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Automate navigation to login page and successful login"
+      },
+      {
+        "type": "action",
+        "description": "Like a post and verify UI updates instantly"
+      },
+      {
+        "type": "action",
+        "description": "Post a comment on the liked post"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to a user profile from the feed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify profile header and tabs load correctly with accurate content"
+      }
+    ]
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:3000",
+  "loginUser": "mesakzitumpul@gmail.com",
+  "loginPassword": "Samuelindra123",
+  "executionArgs": {
+    "projectName": "frontend",
+    "projectPath": "/home/ubuntu/project/frontend",
+    "testIds": [],
+    "additionalInstruction": "",
+    "envs": {
+      "API_KEY": "sk-user-xdlu5RO3Gcu-k53h7W9oB__djez-r5pufq0SSIn3Dcfii8drSfL0w7yKobF3mtvPBiZYtuJT_uOG6_ffvxSTXWE1vFQNeqhswByUOtLvey9Bg9ECiZ0Fba6yGwWDPWLekD4"
+    }
+  },
+  "proxy": "http://605a8a14-df65-43d9-8457-29ef81463abf:JljDmGXuwJmrHCgei114Zaxe8GMl91zo@tun.testsprite.com:8080"
+}

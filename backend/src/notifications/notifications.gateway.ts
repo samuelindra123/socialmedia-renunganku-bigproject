@@ -17,18 +17,22 @@ import { Logger } from '@nestjs/common';
   },
   namespace: '/notifications',
 })
-export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class NotificationsGateway
+  implements OnGatewayConnection, OnGatewayDisconnect
+{
   @WebSocketServer()
   server: Server;
 
   private readonly logger = new Logger(NotificationsGateway.name);
   private userSockets: Map<string, string> = new Map();
 
-  constructor(private jwtService: JwtService) { }
+  constructor(private jwtService: JwtService) {}
 
   async handleConnection(client: Socket) {
     try {
-      const token = client.handshake.auth.token || client.handshake.headers.authorization?.split(' ')[1];
+      const token =
+        client.handshake.auth.token ||
+        client.handshake.headers.authorization?.split(' ')[1];
 
       if (!token) {
         client.disconnect();
@@ -63,6 +67,24 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
     this.logger.log(`Notification sent to user: ${userId}`);
   }
 
+  // Send follow request notification
+  sendFollowRequest(userId: string, data: any) {
+    this.server.to(`user:${userId}`).emit('follow:request', data);
+    this.logger.log(`Follow request sent to user: ${userId}`);
+  }
+
+  // Send follow accepted notification
+  sendFollowAccepted(userId: string, data: any) {
+    this.server.to(`user:${userId}`).emit('follow:accepted', data);
+    this.logger.log(`Follow accepted sent to user: ${userId}`);
+  }
+
+  // Send follow rejected notification
+  sendFollowRejected(userId: string, data: any) {
+    this.server.to(`user:${userId}`).emit('follow:rejected', data);
+    this.logger.log(`Follow rejected sent to user: ${userId}`);
+  }
+
   broadcastNotification(notification: any) {
     this.server.emit('broadcast', notification);
   }
@@ -70,7 +92,9 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
   @SubscribeMessage('markAsRead')
   handleMarkAsRead(@ConnectedSocket() client: Socket, notificationId: string) {
     const userId = client.data.userId;
-    this.logger.log(`User ${userId} marked notification ${notificationId} as read`);
+    this.logger.log(
+      `User ${userId} marked notification ${notificationId} as read`,
+    );
     client.emit('notificationRead', { notificationId });
   }
 }

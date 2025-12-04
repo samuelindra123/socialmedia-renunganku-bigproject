@@ -1,6 +1,5 @@
 import Link from "next/link";
 import {
-  ArrowRight,
   Search,
   PenLine,
   Layout,
@@ -9,8 +8,9 @@ import {
   Settings,
   MoreHorizontal,
   Sparkles,
-  Zap,        // Import icon Zap untuk konsistensi dengan Header
-  BookOpen    // Icon untuk tombol sekunder
+  Zap,
+  BookOpen,
+  Heart,
 } from "lucide-react";
 import Logo from "@/components/Logo";
 import Reveal from "@/components/Reveal";
@@ -104,134 +104,221 @@ export default function Hero() {
                 </div>
               </div>
             </Reveal>
+
+            {/* MOBILE VISUAL: PHONE MOCKUP */}
+            <Reveal animation="fadeInUp" duration={800} delay={350}>
+              <div className="mt-10 flex justify-center lg:hidden">
+                <PhoneMock />
+              </div>
+            </Reveal>
           </div>
 
-          {/* --- RIGHT: THE NATIVE APP MOCKUP (COOLER & COMPLEX) --- */}
+          {/* --- RIGHT: THE NATIVE APP MOCKUP (DESKTOP) --- */}
           <div className="relative hidden lg:block perspective-[2500px]">
             <Reveal animation="fadeIn" duration={1000} delay={400}>
-              {/* 3D Tilt Container */}
-              <div className="relative w-full ml-auto bg-white rounded-2xl shadow-[0_0_0_1px_rgba(0,0,0,0.03),0_30px_60px_-12px_rgba(0,0,0,0.08)] ring-1 ring-slate-900/5 overflow-hidden transform transition-transform duration-700 hover:rotate-y-[-2deg] hover:rotate-x-[2deg] hover:scale-[1.01]">
-
-                {/* --- APP LAYOUT --- */}
-                <div className="flex h-[550px] bg-[#F8F9FA]">
-
-                  {/* 1. SIDEBAR (Navigation) */}
-                  <div className="w-[70px] flex-shrink-0 bg-[#F1F2F4] border-r border-slate-200 flex flex-col items-center py-6 gap-6">
-                    {/* App Logo */}
-                    <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center text-white mb-2 shadow-md">
-                      <Logo variant="icon" height={16} />
-                    </div>
-
-                    {/* Nav Icons */}
-                    <div className="flex flex-col gap-4 w-full px-3">
-                      <div className="w-10 h-10 rounded-lg bg-white shadow-sm border border-slate-200 flex items-center justify-center text-slate-900">
-                        <Layout className="w-5 h-5" />
+              <div className="relative w-full ml-auto transform transition-transform duration-700 hover:rotate-y-[-2deg] hover:rotate-x-2 hover:scale-[1.01]">
+                <div className="bg-white rounded-2xl shadow-[0_0_0_1px_rgba(0,0,0,0.03),0_30px_60px_-12px_rgba(0,0,0,0.08)] ring-1 ring-slate-900/5 overflow-hidden">
+                  <div className="flex h-[550px] bg-[#F8F9FA]">
+                    {/* Sidebar */}
+                    <div className="w-[70px] flex-shrink-0 bg-[#F1F2F4] border-r border-slate-200 flex flex-col items-center py-6 gap-6">
+                      <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center text-white mb-2 shadow-md">
+                        <Logo variant="icon" height={16} />
                       </div>
-                      <div className="w-10 h-10 rounded-lg text-slate-400 hover:bg-white hover:text-slate-600 hover:shadow-sm transition-all flex items-center justify-center">
-                        <Search className="w-5 h-5" />
+                      <div className="flex flex-col gap-4 w-full px-3">
+                        <div className="w-10 h-10 rounded-lg bg-white shadow-sm border border-slate-200 flex items-center justify-center text-slate-900">
+                          <Layout className="w-5 h-5" />
+                        </div>
+                        <div className="w-10 h-10 rounded-lg text-slate-400 hover:bg-white hover:text-slate-600 hover:shadow-sm transition-all flex items-center justify-center">
+                          <Search className="w-5 h-5" />
+                        </div>
+                        <div className="w-10 h-10 rounded-lg text-slate-400 hover:bg-white hover:text-slate-600 hover:shadow-sm transition-all flex items-center justify-center">
+                          <Bell className="w-5 h-5" />
+                        </div>
                       </div>
-                      <div className="w-10 h-10 rounded-lg text-slate-400 hover:bg-white hover:text-slate-600 hover:shadow-sm transition-all flex items-center justify-center">
-                        <Bell className="w-5 h-5" />
+                      <div className="mt-auto">
+                        <div className="w-8 h-8 rounded-full bg-slate-300" />
                       </div>
                     </div>
 
-                    <div className="mt-auto">
-                      <div className="w-8 h-8 rounded-full bg-slate-300"></div>
-                    </div>
-                  </div>
+                    {/* Main content */}
+                    <div className="flex-1 flex flex-col min-w-0 bg-white relative">
+                      <div className="h-14 border-b border-slate-100 flex items-center justify-between px-6 bg-white/80 backdrop-blur-md sticky top-0 z-20">
+                        <h3 className="font-bold text-slate-900 text-sm tracking-tight">Feed Refleksi</h3>
+                        <div className="flex gap-2">
+                          <button className="p-2 text-slate-400 hover:bg-slate-50 rounded-md">
+                            <Settings className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
 
-                  {/* 2. MAIN CONTENT AREA */}
-                  <div className="flex-1 flex flex-col min-w-0 bg-white relative">
+                      <div className="flex-1 overflow-hidden relative [mask-image:linear-gradient(to_bottom,transparent,black_5%,black_95%,transparent)]">
+                        <div className="absolute inset-0 px-6 py-4 space-y-5 animate-[scrollUp_25s_linear_infinite] hover:[animation-play-state:paused]">
+                          {[1, 2, 3, 4, 1, 2, 3, 4].map((item, idx) => (
+                            <div
+                              key={idx}
+                              className="group relative bg-white rounded-xl p-5 border border-slate-100 shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition-all hover:border-slate-300 hover:shadow-md"
+                            >
+                              <div className="flex justify-between items-start mb-3">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-100 to-slate-300 border border-white shadow-sm" />
+                                  <div>
+                                    <div className="text-sm font-bold text-slate-900">User_{1024 + idx}</div>
+                                    <div className="text-[10px] text-slate-400 font-medium">@user{1024 + idx} • 2j</div>
+                                  </div>
+                                </div>
+                                <button className="text-slate-300 hover:text-slate-600">
+                                  <MoreHorizontal className="w-4 h-4" />
+                                </button>
+                              </div>
+                              <p className="text-[13px] leading-relaxed text-slate-600 font-medium">
+                                {idx % 2 === 0
+                                  ? "Ketenangan bukanlah saat tidak ada suara, tapi saat pikiran berdamai dengan kebisingan. Sebuah catatan kecil untuk diri sendiri hari ini."
+                                  : "Mencoba fitur jurnal baru di Renunganku. Sangat membantu untuk tracking mood tanpa tekanan likes."}
+                              </p>
+                              <div className="flex gap-4 mt-4 pt-3 border-t border-slate-50">
+                                <div className="flex items-center gap-1.5 text-slate-400 text-xs group-hover:text-slate-600 transition-colors">
+                                  <MessageSquare className="w-3.5 h-3.5" />
+                                  <span>Diskusi</span>
+                                </div>
+                                {idx % 2 === 0 && (
+                                  <div className="ml-auto flex items-center gap-1 text-[10px] font-bold text-slate-700 bg-slate-100 px-2 py-1 rounded-md">
+                                    <Sparkles className="w-3 h-3 text-slate-500" />
+                                    Trending
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
 
-                    {/* Glass Header */}
-                    <div className="h-14 border-b border-slate-100 flex items-center justify-between px-6 bg-white/80 backdrop-blur-md sticky top-0 z-20">
-                      <h3 className="font-bold text-slate-900 text-sm tracking-tight">Feed Refleksi</h3>
-                      <div className="flex gap-2">
-                        <button className="p-2 text-slate-400 hover:bg-slate-50 rounded-md">
-                          <Settings className="w-4 h-4" />
+                      <div className="absolute bottom-6 right-6 z-30">
+                        <button className="group flex items-center justify-center w-12 h-12 bg-black text-white rounded-full shadow-lg shadow-slate-900/20 hover:scale-110 transition-transform">
+                          <PenLine className="w-5 h-5" />
+                          <span className="absolute right-full mr-3 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                            Tulis Renungan
+                          </span>
                         </button>
                       </div>
                     </div>
-
-                    {/* SCROLLING CONTENT (Infinite Loop) */}
-                    {/* Masking for smooth fade out */}
-                    <div className="flex-1 overflow-hidden relative [mask-image:linear-gradient(to_bottom,transparent,black_5%,black_95%,transparent)]">
-
-                      <div className="absolute inset-0 px-6 py-4 space-y-5 animate-[scrollUp_25s_linear_infinite] hover:[animation-play-state:paused]">
-
-                        {/* --- POST CARD DESIGN --- */}
-                        {/* Repeater for loop */}
-                        {[1, 2, 3, 4, 1, 2, 3, 4].map((item, idx) => (
-                          <div key={idx} className="group relative bg-white rounded-xl p-5 border border-slate-100 shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition-all hover:border-slate-300 hover:shadow-md">
-                            <div className="flex justify-between items-start mb-3">
-                              <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-100 to-slate-300 border border-white shadow-sm"></div>
-                                <div>
-                                  <div className="text-sm font-bold text-slate-900">User_{1024 + idx}</div>
-                                  <div className="text-[10px] text-slate-400 font-medium">@user{1024 + idx} • 2j</div>
-                                </div>
-                              </div>
-                              <button className="text-slate-300 hover:text-slate-600">
-                                <MoreHorizontal className="w-4 h-4" />
-                              </button>
-                            </div>
-
-                            <p className="text-[13px] leading-relaxed text-slate-600 font-medium">
-                              {idx % 2 === 0
-                                ? "Ketenangan bukanlah saat tidak ada suara, tapi saat pikiran berdamai dengan kebisingan. Sebuah catatan kecil untuk diri sendiri hari ini."
-                                : "Mencoba fitur jurnal baru di Renunganku. Sangat membantu untuk tracking mood tanpa tekanan likes."
-                              }
-                            </p>
-
-                            {/* Micro Interactions */}
-                            <div className="flex gap-4 mt-4 pt-3 border-t border-slate-50">
-                              <div className="flex items-center gap-1.5 text-slate-400 text-xs group-hover:text-slate-600 transition-colors">
-                                <MessageSquare className="w-3.5 h-3.5" />
-                                <span>Diskusi</span>
-                              </div>
-                              {idx % 2 === 0 && (
-                                <div className="ml-auto flex items-center gap-1 text-[10px] font-bold text-slate-700 bg-slate-100 px-2 py-1 rounded-md">
-                                  <Sparkles className="w-3 h-3 text-slate-500" />
-                                  Trending
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* FLOATING ACTION BUTTON (The "Cool" Factor) */}
-                    <div className="absolute bottom-6 right-6 z-30">
-                      <button className="group flex items-center justify-center w-12 h-12 bg-black text-white rounded-full shadow-lg shadow-slate-900/20 hover:scale-110 transition-transform">
-                        <PenLine className="w-5 h-5" />
-                        {/* Tooltip */}
-                        <span className="absolute right-full mr-3 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                          Tulis Renungan
-                        </span>
-                      </button>
-                    </div>
-
                   </div>
                 </div>
 
+                {/* Phone overlay */}
+                <div className="absolute -right-10 bottom-0 translate-y-10">
+                  <PhoneMock className="h-[380px] w-[210px] shadow-[0_20px_45px_rgba(15,23,42,0.45)]" />
+                </div>
               </div>
             </Reveal>
 
-            {/* DECORATIVE ELEMENTS BEHIND MOCKUP */}
-            {/* Striped Pattern to add "Texture" */}
+            {/* Decorative stripes */}
             <div className="absolute -right-12 top-12 -z-10 opacity-20 transform rotate-12">
               <div className="flex gap-2">
-                {[1, 2, 3, 4, 5].map(i => (
-                  <div key={i} className="w-2 h-64 bg-slate-300 rounded-full"></div>
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div key={i} className="w-2 h-64 bg-slate-300 rounded-full" />
                 ))}
               </div>
             </div>
-
           </div>
 
         </div>
       </div>
     </section>
+  );
+}
+
+function PhoneMock({ className }: { className?: string }) {
+  return (
+    <div
+      className={`relative flex flex-col rounded-[2rem] border border-slate-800/60 bg-slate-950 text-white overflow-hidden ${
+        className || "h-[420px] w-[230px] shadow-[0_20px_45px_rgba(15,23,42,0.6)]"
+      }`}
+    >
+      {/* Status bar */}
+      <div className="h-9 px-4 flex items-center justify-between text-[11px] text-slate-400 bg-slate-950/90">
+        <span>09:41</span>
+        <div className="flex items-center gap-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <span className="w-3 h-1 rounded-full bg-slate-500"></span>
+          <span className="w-4 h-2 rounded bg-slate-500"></span>
+        </div>
+      </div>
+
+      {/* Header */}
+      <div className="px-4 py-3 border-b border-slate-800 flex items-center justify-between bg-slate-900/80">
+        <div>
+          <p className="text-[11px] font-semibold text-slate-300">Feed Refleksi</p>
+          <p className="text-[10px] text-emerald-400 flex items-center gap-1">
+            <span className="w-1 h-1 rounded-full bg-emerald-400"></span>
+            Tenang • Aktif
+          </p>
+        </div>
+        <div className="flex gap-1.5 text-slate-500">
+          <Search className="w-3.5 h-3.5" />
+          <Bell className="w-3.5 h-3.5" />
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 overflow-hidden px-3 py-3 space-y-2.5 text-[11px] [mask-image:linear-gradient(to_bottom,transparent,white_10%,white_90%,transparent)]">
+        <div className="space-y-2">
+          {[1, 2, 3].map((idx) => (
+            <div
+              key={idx}
+              className="rounded-xl bg-slate-900/60 border border-slate-800 px-3 py-2.5 flex flex-col gap-1.5"
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-slate-600 to-slate-400" />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-semibold truncate">user_{idx} • 3j</span>
+                    {idx === 1 && (
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
+                        Tenang
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <p className="text-[10px] text-slate-300 leading-snug line-clamp-3">
+                {idx === 1
+                  ? "Catatan kecil hari ini: menarik napas lebih panjang dari biasanya, dan mengizinkan diri diam tanpa rasa bersalah."
+                  : idx === 2
+                  ? "Satu paragraf sehari cukup untuk melatih kejujuran pada diri sendiri. Tidak untuk feed publik, tapi untuk hati."
+                  : "Tidak semua hal harus dibalas cepat. Beberapa pesan layak dipikirkan dulu dalam diam."}
+              </p>
+              <div className="flex items-center gap-3 pt-1 text-[9px] text-slate-500">
+                <span className="flex items-center gap-1">
+                  <Heart className="w-3 h-3" /> 24
+                </span>
+                <span className="flex items-center gap-1">
+                  <MessageSquare className="w-3 h-3" /> 6
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom nav */}
+      <div className="h-11 border-t border-slate-800 bg-slate-950 flex items-center justify-around text-[10px] text-slate-500">
+        <div className="flex flex-col items-center gap-0.5 text-emerald-400">
+          <Layout className="w-3.5 h-3.5" />
+          <span>Beranda</span>
+        </div>
+        <div className="flex flex-col items-center gap-0.5">
+          <Search className="w-3.5 h-3.5" />
+          <span>Cari</span>
+        </div>
+        <div className="flex flex-col items-center gap-0.5">
+          <MessageSquare className="w-3.5 h-3.5" />
+          <span>Pesan</span>
+        </div>
+        <div className="flex flex-col items-center gap-0.5">
+          <Settings className="w-3.5 h-3.5" />
+          <span>Profil</span>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -1,13 +1,8 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/changelog/page": "app/changelog/page.js",
-  "/cookies/page": "app/cookies/page.js",
-  "/forgot-password/page": "app/forgot-password/page.js",
+  "/blog/[slug]/page": "app/blog/[slug]/page.js",
+  "/blog/page": "app/blog/page.js",
+  "/features/page": "app/features/page.js",
   "/login/page": "app/login/page.js",
-  "/manifesto/page": "app/manifesto/page.js",
   "/page": "app/page.js",
-  "/privacy/page": "app/privacy/page.js",
-  "/roadmap/page": "app/roadmap/page.js",
-  "/signup/page": "app/signup/page.js",
-  "/terms/page": "app/terms/page.js"
+  "/pricing/page": "app/pricing/page.js"
 }

@@ -6,4 +6,4 @@ import { BookmarksService } from './bookmarks.service';
   controllers: [BookmarksController],
   providers: [BookmarksService],
 })
-export class BookmarksModule { }
+export class BookmarksModule {}

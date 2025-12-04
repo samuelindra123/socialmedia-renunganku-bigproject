@@ -1,43 +1,46 @@
 import {
-    registerDecorator,
-    ValidationOptions,
-    ValidatorConstraint,
-    ValidatorConstraintInterface,
-    ValidationArguments,
+  registerDecorator,
+  ValidationOptions,
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+  ValidationArguments,
 } from 'class-validator';
 
 @ValidatorConstraint({ async: false })
 export class MinimumAgeConstraint implements ValidatorConstraintInterface {
-    validate(birthDate: Date, args: ValidationArguments) {
-        const [minAge] = args.constraints;
+  validate(birthDate: Date, args: ValidationArguments) {
+    const [minAge] = args.constraints;
 
-        const today = new Date();
-        const birth = new Date(birthDate);
+    const today = new Date();
+    const birth = new Date(birthDate);
 
-        let age = today.getFullYear() - birth.getFullYear();
-        const monthDiff = today.getMonth() - birth.getMonth();
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
 
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-            age--;
-        }
-
-        return age >= minAge;
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birth.getDate())
+    ) {
+      age--;
     }
 
-    defaultMessage(args: ValidationArguments) {
-        const [minAge] = args.constraints;
-        return `Umur minimal ${minAge} tahun`;
-    }
+    return age >= minAge;
+  }
+
+  defaultMessage(args: ValidationArguments) {
+    const [minAge] = args.constraints;
+    return `Umur minimal ${minAge} tahun`;
+  }
 }
 
 export function MinimumAge(age: number, validationOptions?: ValidationOptions) {
-    return function (object: Object, propertyName: string) {
-        registerDecorator({
-            target: object.constructor,
-            propertyName: propertyName,
-            options: validationOptions,
-            constraints: [age],
-            validator: MinimumAgeConstraint,
-        });
-    };
+  return function (object: object, propertyName: string) {
+    registerDecorator({
+      target: object.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      constraints: [age],
+      validator: MinimumAgeConstraint,
+    });
+  };
 }

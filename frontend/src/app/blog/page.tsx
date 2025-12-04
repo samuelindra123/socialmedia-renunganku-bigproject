@@ -1,17 +1,58 @@
-"use client";
-
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { 
-  Rss,
-  PenTool,
-  Server,
-  Database,
-  Loader2,
-  FileText
-} from "lucide-react";
+import { Rss, PenTool, Clock, User, Tag, Sparkles } from "lucide-react";
+import Link from "next/link";
+import type { BlogPost } from "@/types";
 
-export default function BlogPage() {
+function mapCategoryLabel(category: BlogPost["category"]): string {
+  switch (category) {
+    case "ProductAndVision":
+      return "Product & Vision";
+    case "Engineering":
+      return "Engineering";
+    case "Design":
+      return "Design";
+    case "Culture":
+      return "Culture";
+    default:
+      return category;
+  }
+}
+
+function formatReadTime(readTimeMinutes: number): string {
+  if (!readTimeMinutes || readTimeMinutes <= 0) return "-";
+  return `${readTimeMinutes} menit`;
+}
+
+function formatPublishedAt(publishedAt: string | null): string {
+  if (!publishedAt) return "";
+  const date = new Date(publishedAt);
+  return date.toLocaleDateString("id-ID", {
+    month: "short",
+    year: "numeric",
+  });
+}
+
+async function fetchBlogPosts(): Promise<BlogPost[]> {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+  const res = await fetch(`${baseUrl}/blog`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    return [];
+  }
+
+  const data = (await res.json()) as BlogPost[] | null;
+  return data ?? [];
+}
+
+export default async function BlogPage() {
+  const posts = await fetchBlogPosts();
+
+  const featured = posts[0] ?? null;
+  const others = posts.slice(1);
+
   return (
     <>
       <Header />
@@ -40,82 +81,161 @@ export default function BlogPage() {
           </div>
         </div>
 
-        {/* --- EMPTY STATE / CMS WAITING MODE --- */}
+        {/* --- BLOG LIST (data asli dari backend) --- */}
         <section className="max-w-7xl mx-auto px-6 relative z-10">
-            
-            <div className="w-full min-h-[500px] rounded-3xl border-2 border-dashed border-slate-200 bg-slate-50/50 flex flex-col items-center justify-center text-center p-12 relative overflow-hidden group">
-                
-                {/* Background Animation inside Card */}
-                <div className="absolute inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
-                
-                {/* Central Visual */}
-                <div className="relative mb-8">
-                    <div className="w-24 h-24 bg-white rounded-2xl border border-slate-200 shadow-xl flex items-center justify-center relative z-10">
-                        <PenTool className="w-10 h-10 text-slate-300" />
-                    </div>
-                    {/* Orbiting Elements */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 border border-slate-200 rounded-full animate-[spin_10s_linear_infinite]">
-                        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-slate-200 rounded-full"></div>
-                    </div>
-                </div>
-
-                <h3 className="text-2xl font-bold text-slate-900 mb-4 tracking-tight">
-                    Sistem Editorial Siap
-                </h3>
-                
-                <p className="text-slate-500 max-w-md mb-10 leading-relaxed">
-                    Database jurnal saat ini kosong. Menunggu publikasi pertama dari panel Admin untuk mengisi feed ini.
-                </p>
-
-                {/* Technical Status Indicators */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
-                    
-                    {/* Status 1: CMS */}
-                    <div className="bg-white px-4 py-3 rounded-lg border border-slate-200 flex items-center gap-3 shadow-sm">
-                        <div className="p-2 bg-emerald-50 rounded-md">
-                            <Database className="w-4 h-4 text-emerald-600" />
-                        </div>
-                        <div className="text-left">
-                            <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">CMS Connection</div>
-                            <div className="text-xs font-mono font-medium text-slate-700 flex items-center gap-1.5">
-                                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
-                                ESTABLISHED
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Status 2: Pipeline */}
-                    <div className="bg-white px-4 py-3 rounded-lg border border-slate-200 flex items-center gap-3 shadow-sm">
-                        <div className="p-2 bg-blue-50 rounded-md">
-                            <Server className="w-4 h-4 text-blue-600" />
-                        </div>
-                        <div className="text-left">
-                            <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Rendering</div>
-                            <div className="text-xs font-mono font-medium text-slate-700">SSR_ACTIVE</div>
-                        </div>
-                    </div>
-
-                    {/* Status 3: Content */}
-                    <div className="bg-white px-4 py-3 rounded-lg border border-slate-200 flex items-center gap-3 shadow-sm">
-                        <div className="p-2 bg-amber-50 rounded-md">
-                            <FileText className="w-4 h-4 text-amber-600" />
-                        </div>
-                        <div className="text-left">
-                            <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Total Posts</div>
-                            <div className="text-xs font-mono font-medium text-slate-700">0_ENTRIES</div>
-                        </div>
-                    </div>
-
-                </div>
-
-                {/* Simulate Loading / Waiting */}
-                <div className="mt-12 flex items-center gap-2 text-xs font-mono text-slate-400 bg-slate-100 px-3 py-1 rounded-full">
-                    <Loader2 className="w-3 h-3 animate-spin" />
-                    Listening for new content...
-                </div>
-
+          {/* Empty state */}
+          {posts.length === 0 ? (
+            <div className="rounded-3xl border border-dashed border-slate-300 bg-white/60 px-6 py-10 text-center text-slate-500">
+              <p className="text-sm font-medium mb-2">Belum ada artikel di blog.</p>
+              <p className="text-xs text-slate-400 max-w-md mx-auto">
+                Saat konten pertama diterbitkan dari panel admin, artikel akan muncul di sini
+                secara otomatis.
+              </p>
             </div>
+          ) : (
+            <>
+          {/* Featured article */}
+          {featured && (
+            <div className="mb-16">
+              <Link
+                href={`/blog/${featured.slug}`}
+                className="relative block overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_18px_60px_rgba(15,23,42,0.08)] transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_24px_70px_rgba(15,23,42,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/70"
+                aria-label={featured.title}
+              >
+                <article className="relative">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,#0f172a_0,#020617_45%,#000_100%)] opacity-80" />
+                  <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_10%_0,#6366f122_0,transparent_40%),radial-gradient(circle_at_90%_0,#ec489944_0,transparent_45%)]" />
+                  <div className="relative p-8 md:p-10 flex flex-col gap-6 text-white">
+                    <div className="flex flex-wrap items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.16em]">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 ring-1 ring-white/15 backdrop-blur">
+                        <Sparkles className="w-3.5 h-3.5" />
+                        Artikel unggulan
+                      </span>
+                      <span className="h-3 w-px bg-white/30" />
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 ring-1 ring-white/15 backdrop-blur">
+                        <PenTool className="w-3.5 h-3.5" />
+                        {mapCategoryLabel(featured.category)}
+                      </span>
+                    </div>
 
+                    <div>
+                      <h2 className="text-2xl md:text-3xl lg:text-[2.35rem] font-semibold tracking-tight leading-tight mb-3">
+                        {featured.title}
+                      </h2>
+                      <p className="text-sm md:text-base text-slate-100/90 max-w-xl leading-relaxed">
+                        {featured.excerpt}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-4 text-[11px] md:text-xs text-slate-100/80">
+                      <div className="inline-flex items-center gap-2">
+                        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/20 text-[10px] font-semibold">
+                          <User className="w-3.5 h-3.5" />
+                        </span>
+                        <div className="flex flex-col">
+                          <span className="font-medium">{featured.authorName}</span>
+                          <span className="text-slate-200/70 text-[10px]">
+                            {featured.authorRole}
+                          </span>
+                        </div>
+                      </div>
+                      <span className="h-4 w-px bg-white/20" />
+                      <div className="inline-flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5" />
+                        <span>{formatReadTime(featured.readTimeMinutes)}</span>
+                        <span className="mx-1 text-slate-300/60">·</span>
+                        <span>{formatPublishedAt(featured.publishedAt)}</span>
+                      </div>
+                      {featured.tags.length > 0 && (
+                        <>
+                          <span className="h-4 w-px bg-white/20" />
+                          <div className="inline-flex items-center gap-2 flex-wrap">
+                            {featured.tags.map((tag) => (
+                              <span
+                                key={tag}
+                                className="inline-flex items-center gap-1 rounded-full bg-white/5 px-2.5 py-0.5 text-[10px] ring-1 ring-white/20"
+                              >
+                                <Tag className="w-3 h-3" />
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              </Link>
+            </div>
+          )}
+
+          {/* Secondary posts grid */}
+          {others.length > 0 && (
+          <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {others.map((post) => (
+              <Link
+                key={post.id}
+                href={`/blog/${post.slug}`}
+                className="group h-full rounded-2xl border border-slate-200 bg-white/80 backdrop-blur-sm p-5 flex flex-col justify-between hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(15,23,42,0.16)] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/70"
+                aria-label={post.title}
+              >
+                <article className="flex h-full flex-col justify-between">
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center justify-between gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                    <span className="inline-flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-slate-900" />
+                      {mapCategoryLabel(post.category)}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-medium text-slate-500 normal-case">
+                      <Clock className="w-3 h-3" />
+                      <span>{formatReadTime(post.readTimeMinutes)}</span>
+                      {post.publishedAt && (
+                        <>
+                          <span className="mx-1">·</span>
+                          <span>{formatPublishedAt(post.publishedAt)}</span>
+                        </>
+                      )}
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="text-sm md:text-base font-semibold text-slate-900 mb-1.5 leading-snug line-clamp-2">
+                      {post.title}
+                    </h3>
+                    <p className="text-[11px] text-slate-500 leading-relaxed line-clamp-3">
+                      {post.excerpt}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-4 flex flex-col gap-3">
+                  <div className="flex items-center justify-between text-[10px] text-slate-500">
+                    <span className="inline-flex items-center gap-1.5">
+                      <User className="w-3 h-3" />
+                      <span className="truncate max-w-[120px]">
+                        {post.authorName}
+                      </span>
+                    </span>
+                    <span />
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {post.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="inline-flex items-center gap-1 rounded-full bg-slate-50 px-2 py-0.5 text-[9px] text-slate-600 border border-slate-200 group-hover:border-slate-300"
+                      >
+                        <Tag className="w-3 h-3" />
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                </article>
+              </Link>
+            ))}
+          </div>
+          )}
+          </>
+          )}
         </section>
 
       </main>

@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
-:root {
-  /* Custom colors variables if needed, but Tailwind 4 handles this well via classes */
-  --background: #f8fafc;
-  /* Slate-50 */
-  --foreground: #0f172a;
-  /* Slate-900 */
+/* 
+ * Dark mode configuration for Tailwind v4
+ * This makes dark: variants work when .dark class is on a parent element
+ */
+@custom-variant dark (&:is(.dark *));
 
+:root {
   /* Brand color variables for consistent theming */
   --color-brand-primary: #4F46E5;
   /* Indigo 600 */
@@ -15,12 +15,53 @@
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
   font-family: var(--font-geist-sans), Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Prose content (TipTap / Markdown-like) - keep these for rich text */
+.dark .prose { color: #cbd5e1; }
+.dark .prose p, .dark .prose li { color: #cbd5e1; }
+.dark .prose h1, .dark .prose h2, .dark .prose h3, .dark .prose h4 { color: #e5e7eb; }
+.dark .prose a { color: #60a5fa; }
+.dark .prose strong { color: #e5e7eb; }
+.dark .prose code { color: #e5e7eb; background-color: #1e293b; }
+
+/* Prose paragraph spacing for proper line breaks */
+.prose p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.prose-sm p {
+  margin-top: 0.375em;
+  margin-bottom: 0.375em;
+}
+
+/* Line clamp utilities for text truncation with ellipsis */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
 
 /* Utilitas untuk scroll bar yang rapi */
 ::-webkit-scrollbar {

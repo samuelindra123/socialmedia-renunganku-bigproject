@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Twitter, Github, Mail } from "lucide-react";
 import Logo from "@/components/Logo";
+import SystemStatusIndicator from "@/components/SystemStatusIndicator";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -22,16 +23,8 @@ export default function Footer() {
               Ruang digital yang tenang untuk refleksi diri. Dibangun untuk individu yang menghargai fokus di atas kebisingan.
             </p>
 
-            {/* Enterprise Touch: System Status Indicator */}
-            <div className="flex items-center gap-2.5 px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-full w-fit">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              <span className="text-[11px] font-medium text-slate-600 tracking-tight">
-                All systems normal
-              </span>
-            </div>
+            {/* Enterprise Touch: System Status Indicator (interactive) */}
+            <SystemStatusIndicator />
           </div>
 
           {/* Right: Highly Relevant Navigation (No Fluff) */}

@@ -1,0 +1,167 @@
+{
+  "meta": {
+    "project": "Social Media Feed Platform",
+    "date": "2025-11-19",
+    "prepared_by": "Software Development Manager"
+  },
+  "product_overview": "A modern social media platform for posting, interacting, and discovering content through a personalized feed, user profiles, and rich social interactions leveraging React and Next.js.",
+  "core_goals": [
+    "Provide a seamless user experience for creating and consuming posts with rich media support.",
+    "Enable robust social interactions such as liking, commenting, following, and sharing within the platform.",
+    "Ensure reliable and performant data loading and state management using efficient React libraries and APIs.",
+    "Offer comprehensive user authentication and onboarding for secure access and personalized content.",
+    "Support content discovery through explore and discover pages to increase user engagement.",
+    "Maintain content integrity and usability by supporting post editing, deletion, and rich text editing features."
+  ],
+  "key_features": [
+    "Feed Post Card component with media display, likes, comments, edit/delete/share modals, and interaction panels.",
+    "Create Post modal supporting text and media uploads with a rich text editor.",
+    "Sidebar navigation and user suggestion components to enhance engagement.",
+    "Profile sections including customizable headers and tabbed content views (posts, likes, etc).",
+    "Rich Text Editor integration based on TipTap for posts and comments.",
+    "Authentication management with Zustand store and secured query/toast providers.",
+    "API client built with Axios for backend communication.",
+    "Marketing and static content pages including pricing, blog, roadmap, terms, and privacy.",
+    "State-of-the-art UI with Next.js 16, React 19, and Tailwind CSS styling."
+  ],
+  "user_flow_summary": [
+    "User onboarding with authentication steps: login, signup, email verification, and password recovery.",
+    "Browsing the personalized feed, liking/unliking posts and comments, and posting new content.",
+    "Interacting with other users through following/unfollowing and viewing user suggestions.",
+    "Using the explore and discover pages to browse new content and navigate through tags and profiles.",
+    "Editing and deleting posts through modal interfaces with immediate UI updates.",
+    "Accessing user profiles with tabs showing posts, likes, and other social metrics.",
+    "Participating in comment threads with rich text support and the ability to reply to comments.",
+    "Consuming static marketing and informational pages with seamless navigation."
+  ],
+  "validation_criteria": [
+    "Likes/unlikes update UI instantly and reflect accurate counts without errors.",
+    "Comments can be successfully posted, replied to, and liked, with appropriate validation messages for errors.",
+    "Follow/unfollow actions perform optimistic updates with rollback on failure and display error notifications.",
+    "Edit and delete post functionalities open modals, perform updates, and invalidate caches correctly.",
+    "Media playback controls (play, pause, mute, unmute) function correctly with visible status.",
+    "Authentication flows (login, signup, verify email, forgot password) redirect and guard routes properly.",
+    "Explore and discover pages render content accurately and handle pagination or infinite scroll seamlessly.",
+    "Static content pages load correctly with working links and proper content display.",
+    "Automated end-to-end tests cover critical paths including feed interactions, authentication, and profile navigation to ensure stability."
+  ],
+  "code_summary": {
+    "tech_stack": [
+      "TypeScript",
+      "Next.js 16",
+      "React 19",
+      "Tailwind CSS",
+      "TanStack Query",
+      "Zustand",
+      "Axios",
+      "Lucide Icons"
+    ],
+    "features": [
+      {
+        "name": "Feed - PostCard",
+        "description": "Kartu postingan dengan media, like/unlike post, komentar, like/unlike komentar, modal edit/delete/share, daftar likes, dan panel komentar.",
+        "files": [
+          "src/components/feed/PostCard.tsx"
+        ]
+      },
+      {
+        "name": "Feed - Create Post",
+        "description": "Modal pembuatan post dengan dukungan teks dan media.",
+        "files": [
+          "src/components/feed/CreatePostModal.tsx"
+        ]
+      },
+      {
+        "name": "Feed - Sidebar",
+        "description": "Sidebar feed termasuk navigasi dan elemen pendukung.",
+        "files": [
+          "src/components/feed/Sidebar.tsx"
+        ]
+      },
+      {
+        "name": "Feed - User Suggestions",
+        "description": "Komponen rekomendasi pengguna untuk diikuti.",
+        "files": [
+          "src/components/feed/UserSuggestions.tsx"
+        ]
+      },
+      {
+        "name": "Profile - Header",
+        "description": "Header profil pengguna dan aksi follow.",
+        "files": [
+          "src/components/profile/ProfileHeader.tsx"
+        ]
+      },
+      {
+        "name": "Profile - Tabs",
+        "description": "Tab konten profil (posts, likes, dsb).",
+        "files": [
+          "src/components/profile/ProfileTabs.tsx"
+        ]
+      },
+      {
+        "name": "Rich Text Editor",
+        "description": "Editor konten berbasis TipTap untuk posting dan komentar.",
+        "files": [
+          "src/components/common/RichTextEditor.tsx"
+        ]
+      },
+      {
+        "name": "Pages - Feed/Explore/Discover/Profile",
+        "description": "Halaman utama aplikasi untuk feed, explore, discover, dan profil pengguna.",
+        "files": [
+          "src/app/feed/page.tsx",
+          "src/app/explore/page.tsx",
+          "src/app/discover/page.tsx",
+          "src/app/profile/[username]/page.tsx",
+          "src/app/profile/page.tsx"
+        ]
+      },
+      {
+        "name": "Auth Store & Provider",
+        "description": "Manajemen auth dengan Zustand dan provider Query/Toast.",
+        "files": [
+          "src/store/auth.ts",
+          "src/providers/query-provider.tsx",
+          "src/providers/toast-provider.tsx",
+          "src/components/auth/AuthCheck.tsx"
+        ]
+      },
+      {
+        "name": "API Client",
+        "description": "Wrapper Axios untuk panggilan API backend.",
+        "files": [
+          "src/lib/api/client.ts"
+        ]
+      },
+      {
+        "name": "Utilities & Types",
+        "description": "Utilitas (format waktu) dan tipe aplikasi.",
+        "files": [
+          "src/lib/utils.ts",
+          "src/types/index.ts"
+        ]
+      },
+      {
+        "name": "Marketing Pages",
+        "description": "Halaman informasi (pricing, features, blog, dsb).",
+        "files": [
+          "src/app/page.tsx",
+          "src/components/Header.tsx",
+          "src/components/Hero.tsx",
+          "src/components/ProductShowcase.tsx",
+          "src/components/Footer.tsx",
+          "src/app/features/page.tsx",
+          "src/app/pricing/page.tsx",
+          "src/app/blog/page.tsx",
+          "src/app/manifesto/page.tsx",
+          "src/app/changelog/page.tsx",
+          "src/app/roadmap/page.tsx",
+          "src/app/cookies/page.tsx",
+          "src/app/terms/page.tsx",
+          "src/app/privacy/page.tsx"
+        ]
+      }
+    ]
+  }
+}

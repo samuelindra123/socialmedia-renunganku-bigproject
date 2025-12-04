@@ -1,6 +1,7 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
+import { BullModule } from '@nestjs/bull';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
@@ -18,10 +19,20 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { FeedModule } from './feed/feed.module';
 import { StoriesModule } from './stories/stories.module';
 import { MessagesModule } from './messages/messages.module';
+import { EventsModule } from './events/events.module';
+import { VideosModule } from './videos/videos.module';
+import { AlkitabModule } from './alkitab/alkitab.module';
+import { SystemStatusModule } from './system-status/system-status.module';
+import { BlogModule } from './blog/blog.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    BullModule.forRoot({
+      redis: process.env.REDIS_URL
+        ? process.env.REDIS_URL
+        : { host: '127.0.0.1', port: 6379 },
+    }),
     PrismaModule,
     AuthModule,
     MailModule,
@@ -37,6 +48,11 @@ import { MessagesModule } from './messages/messages.module';
     FeedModule,
     StoriesModule,
     MessagesModule,
+    EventsModule,
+    VideosModule,
+    AlkitabModule,
+    SystemStatusModule,
+    BlogModule,
   ],
   providers: [
     {
