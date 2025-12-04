@@ -3,8 +3,10 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "postinstall": "npm install --prefix backend && npm run build --prefix backend",
-    "build": "npm run build --prefix backend",
+    "postinstall": "npm install --prefix backend",
+    "build": "npm run build:backend",
+    "build:backend": "npm run build --prefix backend && npm run prune:backend",
+    "prune:backend": "npm prune --omit=dev --prefix backend",
     "start": "npm run start:prod --prefix backend"
   }
 }

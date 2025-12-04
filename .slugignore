@@ -1,0 +1,16 @@
+# Exclude non-backend apps and docs from slug
+admin/
+frontend/
+docker/
+docs/
+README.md
+
+# Backend temporary and uploaded files not needed in slug
+backend/tmp/
+backend/uploads/
+backend/test-2min-720p.mp4
+backend/backend.log
+
+# Common build/test artifacts
+**/coverage/
+**/.cache/
