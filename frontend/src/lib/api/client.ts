@@ -1,7 +1,13 @@
 import axios, { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const RAW_API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+
+// Ensure HTTPS in browser when the page itself is served over HTTPS to avoid mixed content
+const API_URL =
+  typeof window !== 'undefined' && window.location.protocol === 'https:'
+    ? RAW_API_URL.replace(/^http:\/\//, 'https://')
+    : RAW_API_URL;
 
 export const apiClient = axios.create({
   baseURL: API_URL,

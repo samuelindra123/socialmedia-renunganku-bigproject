@@ -20,9 +20,14 @@ export function SocketProvider({ children }: { children: ReactNode }) {
   const { user } = useAuthStore();
 
   useEffect(() => {
-    // Connect to WebSocket server
-    const socketUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:4000';
-    
+    const raw = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+    const baseUrl =
+      typeof window !== 'undefined' && window.location.protocol === 'https:'
+        ? raw.replace(/^http:\/\//, 'https://')
+        : raw;
+
+    const socketUrl = baseUrl.replace('/api', '');
+
     const socketInstance = io(socketUrl, {
       transports: ['websocket', 'polling'],
       autoConnect: true,

@@ -32,8 +32,12 @@ export function NotificationsSocketProvider({ children }: { children: ReactNode 
   const connectionRef = useRef<Socket | null>(null);
 
   const baseUrl = useMemo(() => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
-    return apiUrl.replace(/\/?api$/, "");
+    const raw = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+    const normalized =
+      typeof window !== "undefined" && window.location.protocol === "https:"
+        ? raw.replace(/^http:\/\//, "https://")
+        : raw;
+    return normalized.replace(/\/?api$/, "");
   }, []);
 
   useEffect(() => {
